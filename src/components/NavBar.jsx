@@ -1,11 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50); // activate after 50px
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav
+      className={`fixed w-full z-50 transition-all duration-300 ${
+        scrolled ? 'bg-white shadow-md' : 'bg-transparent'
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
@@ -15,42 +29,81 @@ export default function Navbar() {
               alt="HomeLink"
               className="h-8 w-8"
             />
-            <span className="text-xl font-bold text-gray-800">HomeLink</span>
+            <span
+              className={`text-xl font-bold ${
+                scrolled ? 'text-gray-800' : 'text-white'
+              }`}>
+              HomeLink
+            </span>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6">
-            <a className="rounded-md px-3 py-2 text-md font-medium text-gray-300 hover:text-white">
+            <div
+              href="#rent"
+              className={`cursor-pointer font-medium ${
+                scrolled
+                  ? 'text-gray-600 hover:text-teal-600'
+                  : 'text-white hover:text-teal-200'
+              }`}>
               Rent
-            </a>
-            <a href="#buy" className="text-gray-600 hover:text-teal-600">
+            </div>
+            <div
+              href="#buy"
+              className={`cursor-pointer font-medium ${
+                scrolled
+                  ? 'text-gray-600 hover:text-teal-600'
+                  : 'text-white hover:text-teal-200'
+              }`}>
               Buy
-            </a>
-            <a href="#about" className="text-gray-600 hover:text-teal-600">
+            </div>
+            <div
+              href="#about"
+              onClick={() => navigate('/profile')}
+              className={`cursor-pointer font-medium ${
+                scrolled
+                  ? 'text-gray-600 hover:text-teal-600'
+                  : 'text-white hover:text-teal-200'
+              }`}>
               About
-            </a>
-            <a href="#contact" className="text-gray-600  hover:text-teal-600">
+            </div>
+            <div
+              href="#contact"
+              onClick={() => navigate('/landlord')}
+              className={`cursor-pointer font-medium ${
+                scrolled
+                  ? 'text-gray-600 hover:text-teal-600'
+                  : 'text-white hover:text-teal-200'
+              }`}>
               Contact
-            </a>
+            </div>
 
             {/* Auth Buttons */}
             <div className="flex items-center space-x-4">
-              {/* <a
-                href="#login"
-                className="text-gray-600 hover:text-teal-600 font-medium">
+              <div
+                href="login"
+                onClick={() => navigate('/login')}
+                className={`cursor-pointer font-medium ${
+                  scrolled
+                    ? 'text-gray-600 hover:text-teal-600'
+                    : 'text-white hover:text-teal-200'
+                }`}>
                 Login
-              </a> */}
-              <a
+              </div>
+              <div
                 href="#signup"
-                className="px-4 py-2 rounded-full bg-teal-600 text-white font-semibold hover:bg-teal-700 transition">
+                onClick={() => navigate('/signup')}
+                className="cursor-pointer px-4 py-2 rounded-full bg-teal-600 text-white font-semibold hover:bg-teal-700 transition">
                 Sign Up
-              </a>
+              </div>
             </div>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <button onClick={() => setOpen(!open)} className="text-gray-700">
+            <button
+              onClick={() => setOpen(!open)}
+              className={scrolled ? 'text-gray-700' : 'text-white'}>
               {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
@@ -59,30 +112,55 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden px-4 pb-4 space-y-3">
+        <div
+          className={`md:hidden px-4 pb-4 space-y-3 ${
+            scrolled ? 'bg-white' : 'bg-gray-900'
+          }`}>
           <a
             href="#rent"
-            className="block text-gray-600 hover:text-teal-600 no-underline">
+            className={`block ${
+              scrolled
+                ? 'text-gray-600 hover:text-teal-600'
+                : 'text-white hover:text-teal-200'
+            }`}>
             Rent
           </a>
           <a
             href="#buy"
-            className="block no-underline text-gray-600 hover:text-teal-600">
+            className={`block ${
+              scrolled
+                ? 'text-gray-600 hover:text-teal-600'
+                : 'text-white hover:text-teal-200'
+            }`}>
             Buy
           </a>
-          <a href="#about" className="block text-gray-600 hover:text-teal-600">
+          <a
+            href="#about"
+            className={`block ${
+              scrolled
+                ? 'text-gray-600 hover:text-teal-600'
+                : 'text-white hover:text-teal-200'
+            }`}>
             About
           </a>
           <a
             href="#contact"
-            className="block text-gray-600 hover:text-teal-600">
+            className={`block ${
+              scrolled
+                ? 'text-gray-600 hover:text-teal-600'
+                : 'text-white hover:text-teal-200'
+            }`}>
             Contact
           </a>
 
           {/* Auth Buttons */}
           <a
             href="#login"
-            className="block text-gray-600 hover:text-teal-600 font-medium ">
+            className={`block font-medium ${
+              scrolled
+                ? 'text-gray-600 hover:text-teal-600'
+                : 'text-white hover:text-teal-200'
+            }`}>
             Login
           </a>
           <a

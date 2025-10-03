@@ -1,0 +1,115 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+export default function Signup() {
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirm: '',
+  });
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!form.name || !form.email || !form.password || !form.confirm) {
+      setError('All fields are required.');
+      return;
+    }
+    if (form.password !== form.confirm) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    // TODO: hook into backend later
+    console.log('Signup submitted:', form);
+  };
+
+  return (
+    <section className="min-h-screen flex">
+      {/* Left side (branding) */}
+      <div className="hidden md:flex flex-1 bg-teal-600 text-white items-center justify-center p-12">
+        <div className="max-w-md">
+          <h1 className="text-4xl font-bold mb-6">Welcome to HomeLink</h1>
+          <p className="text-lg text-teal-100">
+            Find your dream home, connect with landlords, and explore listings
+            all in one place.
+          </p>
+        </div>
+      </div>
+
+      {/* Right side (form) */}
+      <div className="flex-1 flex items-center justify-center bg-gray-50 px-6">
+        <div className="bg-white w-full max-w-md rounded-2xl shadow-md p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+            Create Account
+          </h2>
+
+          {error && (
+            <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className=" grid gap-4">
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Full Name"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 space-y-4"
+            />
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="Email"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            />
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            />
+            <input
+              type="password"
+              name="confirm"
+              value={form.confirm}
+              onChange={handleChange}
+              placeholder="Confirm Password"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            />
+
+            <button
+              type="submit"
+              className="w-full px-6 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition">
+              Sign Up
+            </button>
+          </form>
+
+          <p className="text-gray-600 text-sm mt-6 text-center">
+            Already have an account?{' '}
+            <a
+              href="#"
+              onClick={() => navigate('/login')}
+              className="text-teal-600 font-medium hover:underline">
+              Login
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}

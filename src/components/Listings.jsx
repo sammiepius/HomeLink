@@ -2,8 +2,8 @@ export default function Listings() {
   const properties = [
     {
       id: 1,
-      title: 'Modern Apartment in City Center',
-      price: '$1,200 / month',
+      title: 'Modern Apartment',
+      price: '₦1,200 / month',
       type: 'For Rent',
       image:
         'https://images.unsplash.com/photo-1600607688968-6b4d59f0a1f0?auto=format&fit=crop&w=800&q=80',
@@ -11,7 +11,7 @@ export default function Listings() {
     {
       id: 2,
       title: 'Luxury Villa with Pool',
-      price: '$450,000',
+      price: '₦450,000',
       type: 'For Sale',
       image:
         'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
@@ -19,19 +19,19 @@ export default function Listings() {
     {
       id: 3,
       title: 'Cozy Suburban Home',
-      price: '$250,000',
+      price: '₦250,000',
       type: 'For Sale',
       image:
         'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80',
     },
-    {
-      id: 4,
-      title: 'Stylish Loft Apartment',
-      price: '$900 / month',
-      type: 'For Rent',
-      image:
-        'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80',
-    },
+    // {
+    //   id: 4,
+    //   title: 'Stylish Loft Apartment',
+    //   price: '₦900 / month',
+    //   type: 'For Rent',
+    //   image:
+    //     'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80',
+    // },
   ];
 
   return (

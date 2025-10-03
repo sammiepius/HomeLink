@@ -27,14 +27,14 @@ export default function UserProfile() {
             <div className="border p-4 rounded-lg flex justify-between items-center">
               <div>
                 <p className="font-medium">2-Bedroom Apartment</p>
-                <p className="text-gray-600">$1,200/mo • Lagos</p>
+                <p className="text-gray-600">₦1,200/mo • Lagos</p>
               </div>
               <Button>View</Button>
             </div>
             <div className="border p-4 rounded-lg flex justify-between items-center">
               <div>
                 <p className="font-medium">Studio Flat</p>
-                <p className="text-gray-600">$600/mo • Abuja</p>
+                <p className="text-gray-600">₦600/mo • Abuja</p>
               </div>
               <Button>View</Button>
             </div>

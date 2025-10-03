@@ -31,7 +31,7 @@ export default function LandlordProfile() {
             <div className="border p-4 rounded-lg flex justify-between items-center">
               <div>
                 <p className="font-medium">3-Bedroom Duplex</p>
-                <p className="text-gray-600">$2,500/mo • Abuja</p>
+                <p className="text-gray-600">₦2,500/mo • Abuja</p>
               </div>
               <div className="flex space-x-2">
                 <Button>View</Button>
@@ -41,7 +41,7 @@ export default function LandlordProfile() {
             <div className="border p-4 rounded-lg flex justify-between items-center">
               <div>
                 <p className="font-medium">1-Bedroom Flat</p>
-                <p className="text-gray-600">$900/mo • Lagos</p>
+                <p className="text-gray-600">₦900/mo • Lagos</p>
               </div>
               <div className="flex space-x-2">
                 <Button>View</Button>

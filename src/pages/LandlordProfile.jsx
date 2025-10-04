@@ -1,12 +1,14 @@
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
+import { useNavigate } from "react-router-dom";
 
 export default function LandlordProfile() {
+  const navigate = useNavigate();
   return (
     <section className="min-h-screen bg-gray-50 py-12 px-6 flex justify-center">
       <div className="w-full max-w-3xl space-y-8">
         {/* Profile Info */}
-        <Card>
+        <Card >
           <div className="flex items-center space-x-4">
             <img
               src="https://via.placeholder.com/80"
@@ -24,7 +26,7 @@ export default function LandlordProfile() {
         <Card>
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-semibold">My Posted Apartments</h3>
-            <Button>+ New Listing</Button>
+            <Button onClick={()=>navigate("/addproperties")}>+ New Listing</Button>
           </div>
 
           <div className="space-y-4">

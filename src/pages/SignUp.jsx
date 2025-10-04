@@ -7,6 +7,7 @@ export default function Signup() {
     email: '',
     password: '',
     confirm: '',
+    role: 'user'
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -27,7 +28,10 @@ export default function Signup() {
       setError('Passwords do not match.');
       return;
     }
-
+    if (!form.role) {
+      setError('Please select your role.');
+      return;
+    }
     // TODO: hook into backend later
     console.log('Signup submitted:', form);
   };
@@ -91,6 +95,36 @@ export default function Signup() {
               placeholder="Confirm Password"
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
+
+            {/* Role selection */}
+            <div>
+              <p className="text-gray-700 font-medium mb-2">I am a:</p>
+              <div className="flex items-center space-x-6">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="user"
+                    checked={form.role === 'user'}
+                    onChange={handleChange}
+                    className="text-teal-600 focus:ring-teal-500"
+                  />
+                  <span>User (Looking for a home)</span>
+                </label>
+
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="landlord"
+                    checked={form.role === 'landlord'}
+                    onChange={handleChange}
+                    className="text-teal-600 focus:ring-teal-500"
+                  />
+                  <span>Landlord (Posting apartments)</span>
+                </label>
+              </div>
+            </div>
 
             <button
               type="submit"

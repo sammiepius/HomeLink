@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import LandlordProfile from './pages/LandlordProfile';
 import UserProfile from './pages/UserProfile';
+import AddProperty from './pages/AddProperties';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/landlord" element={<LandlordProfile />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/addproperties" element={<AddProperty />} />
       </Routes>
     </Router>
   );

@@ -59,7 +59,7 @@ export default function Navbar() {
             </div>
             <div
               href="#about"
-              onClick={() => navigate('/profile')}
+              onClick={()=>navigate('/landlord')}
               className={`cursor-pointer font-medium ${
                 scrolled
                   ? 'text-gray-600 hover:text-teal-600'
@@ -69,7 +69,6 @@ export default function Navbar() {
             </div>
             <div
               href="#contact"
-              onClick={() => navigate('/landlord')}
               className={`cursor-pointer font-medium ${
                 scrolled
                   ? 'text-gray-600 hover:text-teal-600'

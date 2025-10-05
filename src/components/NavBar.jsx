@@ -32,7 +32,8 @@ export default function Navbar() {
             <span
               className={`text-xl font-bold ${
                 scrolled ? 'text-gray-800' : 'text-white'
-              }`}>
+              }`}
+              >
               HomeLink
             </span>
           </div>
@@ -42,11 +43,14 @@ export default function Navbar() {
             <div
               href="#properties"
               onClick={() => navigate('/properties')}
-              className={`cursor-pointer font-medium ${
+              className={`cursor-pointer font-medium 
+                ${
                 scrolled
                   ? 'text-gray-600 hover:text-teal-600'
                   : 'text-white hover:text-teal-200'
-              }`}>
+              }`
+            }
+              >
               Properties
             </div>
             <div

@@ -132,7 +132,7 @@ export default function Listings() {
                   {p.type === 'rent' && '/mo'}
                 </p>
                 <button
-                  // onClick={() => navigate(/property/${p.id})}
+                  onClick={() => navigate(`/properties/${p.id}`)}
                   className="mt-3 w-full bg-teal-600 text-white py-2 rounded hover:bg-teal-700">
                   View Details
                 </button>

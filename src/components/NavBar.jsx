@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -40,8 +40,21 @@ export default function Navbar() {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6">
             <div
-              href="#rent"
+              href="#properties"
+              onClick={() => navigate('/properties')}
               className={`cursor-pointer font-medium ${
+                scrolled
+                  ? 'text-gray-600 hover:text-teal-600'
+                  : 'text-white hover:text-teal-200'
+              }`}>
+              Properties
+            </div>
+            <div
+              // style={{ textDecoration: 'none', color: 'gray' }}
+              // to="/listings/rent"
+              // href="#rent"
+              onClick={() => navigate('/listings/rent')}
+              className={`cursor-pointer font-medium  ${
                 scrolled
                   ? 'text-gray-600 hover:text-teal-600'
                   : 'text-white hover:text-teal-200'
@@ -49,23 +62,16 @@ export default function Navbar() {
               Rent
             </div>
             <div
-              href="#buy"
+              onClick={() => navigate('/listings/buy')}
+              // to="/listings/buy"
+              href="#listing"
+              // onClick={() => navigate('/landlord')}
               className={`cursor-pointer font-medium ${
                 scrolled
                   ? 'text-gray-600 hover:text-teal-600'
                   : 'text-white hover:text-teal-200'
               }`}>
               Buy
-            </div>
-            <div
-              href="#about"
-              onClick={()=>navigate('/landlord')}
-              className={`cursor-pointer font-medium ${
-                scrolled
-                  ? 'text-gray-600 hover:text-teal-600'
-                  : 'text-white hover:text-teal-200'
-              }`}>
-              About
             </div>
             <div
               href="#contact"

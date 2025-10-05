@@ -8,17 +8,21 @@ import SignUp from './pages/SignUp';
 import LandlordProfile from './pages/LandlordProfile';
 import UserProfile from './pages/UserProfile';
 import AddProperty from './pages/AddProperties';
+import Properties from './pages/Properties';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/listings/:type" element={<Properties />} />
+        <Route path="/listings/:type" element={<Properties />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/landlord" element={<LandlordProfile />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/addproperties" element={<AddProperty />} />
+        <Route path="/properties" element={<Properties />} />
       </Routes>
     </Router>
   );

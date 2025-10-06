@@ -1,24 +1,35 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const isHome = location.pathname === '/';
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50); // activate after 50px
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  useEffect(
+    () => {
+      if (!isHome) return;
+      const handleScroll = () => {
+        setScrolled(window.scrollY > 50); // activate after 50px
+      };
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    },
+    [],
+    [isHome]
+  );
 
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white shadow-md' : 'bg-transparent'
+        isHome
+          ? scrolled
+            ? 'bg-white shadow-md'
+            : 'bg-transparent'
+          : 'bg-white shadow-md'
       }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
@@ -44,9 +55,11 @@ export default function Navbar() {
               onClick={() => navigate('/properties')}
               className={`cursor-pointer font-medium 
                 ${
-                  scrolled
-                    ? 'text-gray-600 hover:text-teal-600'
-                    : 'text-white hover:text-teal-200'
+                  isHome
+                    ? scrolled
+                      ? 'text-gray-600 hover:text-teal-600'
+                      : 'text-white hover:text-teal-200'
+                    : 'text-gray-600 hover:text-teal-600'
                 }`}>
               Properties
             </div>
@@ -56,9 +69,11 @@ export default function Navbar() {
               // href="#rent"
               onClick={() => navigate('/listings/rent')}
               className={`cursor-pointer font-medium  ${
-                scrolled
-                  ? 'text-gray-600 hover:text-teal-600'
-                  : 'text-white hover:text-teal-200'
+                isHome
+                  ? scrolled
+                    ? 'text-gray-600 hover:text-teal-600'
+                    : 'text-white hover:text-teal-200'
+                  : 'text-gray-600 hover:text-teal-600'
               }`}>
               For Rent
             </div>
@@ -68,13 +83,15 @@ export default function Navbar() {
               href="#listing"
               // onClick={() => navigate('/landlord')}
               className={`cursor-pointer font-medium ${
-                scrolled
-                  ? 'text-gray-600 hover:text-teal-600'
-                  : 'text-white hover:text-teal-200'
+                isHome
+                  ? scrolled
+                    ? 'text-gray-600 hover:text-teal-600'
+                    : 'text-white hover:text-teal-200'
+                  : 'text-gray-600 hover:text-teal-600'
               }`}>
               For Sale
             </div>
-            <div
+            {/* <div
               onClick={() => navigate('/landlord')}
               href="#contact"
               className={`cursor-pointer font-medium ${
@@ -83,7 +100,7 @@ export default function Navbar() {
                   : 'text-white hover:text-teal-200'
               }`}>
               Contact
-            </div>
+            </div> */}
 
             {/* Auth Buttons */}
             <div className="flex items-center space-x-4">

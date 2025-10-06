@@ -7,7 +7,7 @@ import Listings from '../components/Listings';
 export default function HomePage() {
   return (
     <div className="font-sans">
-      <Navbar />
+      {/* <Navbar /> */}
       <Hero />
       <Features />
       <Listings />

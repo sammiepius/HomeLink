@@ -15,7 +15,7 @@ import Navbar from './components/NavBar';
 function App() {
   return (
     <Router>
-      <Navbar/>
+      <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/listings/:type" element={<Properties />} />

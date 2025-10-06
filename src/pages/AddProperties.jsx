@@ -8,6 +8,7 @@ export default function AddProperty() {
     description: '',
     bedrooms: '',
     bathrooms: '',
+    house_for: 'rent',
     images: [],
   });
   const [error, setError] = useState('');
@@ -101,6 +102,34 @@ export default function AddProperty() {
               placeholder="Bathrooms"
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
+          </div>
+          <div>
+            {/* <p className="text-gray-700 font-medium mb-2">I am a:</p> */}
+            <div className="flex items-center space-x-6">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="house_for"
+                  value="rent"
+                  checked={form.house_for === 'rent'}
+                  onChange={handleChange}
+                  className="text-teal-600 focus:ring-teal-500"
+                />
+                <span>For Rents</span>
+              </label>
+
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="house_for"
+                  value="sale"
+                  checked={form.house_for === 'sale'}
+                  onChange={handleChange}
+                  className="text-teal-600 focus:ring-teal-500"
+                />
+                <span>For Sale</span>
+              </label>
+            </div>
           </div>
 
           {/* Description */}

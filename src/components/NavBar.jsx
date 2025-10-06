@@ -32,8 +32,7 @@ export default function Navbar() {
             <span
               className={`text-xl font-bold ${
                 scrolled ? 'text-gray-800' : 'text-white'
-              }`}
-              >
+              }`}>
               HomeLink
             </span>
           </div>
@@ -45,12 +44,10 @@ export default function Navbar() {
               onClick={() => navigate('/properties')}
               className={`cursor-pointer font-medium 
                 ${
-                scrolled
-                  ? 'text-gray-600 hover:text-teal-600'
-                  : 'text-white hover:text-teal-200'
-              }`
-            }
-              >
+                  scrolled
+                    ? 'text-gray-600 hover:text-teal-600'
+                    : 'text-white hover:text-teal-200'
+                }`}>
               Properties
             </div>
             <div
@@ -63,7 +60,7 @@ export default function Navbar() {
                   ? 'text-gray-600 hover:text-teal-600'
                   : 'text-white hover:text-teal-200'
               }`}>
-              Rent
+              For Rent
             </div>
             <div
               onClick={() => navigate('/listings/buy')}
@@ -75,9 +72,10 @@ export default function Navbar() {
                   ? 'text-gray-600 hover:text-teal-600'
                   : 'text-white hover:text-teal-200'
               }`}>
-              Buy
+              For Sale
             </div>
             <div
+              onClick={() => navigate('/landlord')}
               href="#contact"
               className={`cursor-pointer font-medium ${
                 scrolled

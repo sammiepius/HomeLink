@@ -12,7 +12,7 @@ export default function Navbar() {
   const auth = useAuth();
   // console.log(auth)
   const { user, login, logout } = auth || {};
-  console.log(user)
+  console.log(user);
 
   const isHome = location.pathname === '/';
 
@@ -239,32 +239,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
-// import { Link } from 'react-router-dom';
-// import { useAuth } from '../context/AuthContext';
-
-// export default function Navbar() {
-//   const { user, logout } = useAuth();
-
-//   return (
-//     <nav className="flex justify-between items-center p-4 bg-white shadow">
-//       <h1 className="text-xl font-bold">HomeLink</h1>
-//       <div className="flex gap-4">
-//         <Link to="/">Home</Link>
-//         <Link to="/listings">Listings</Link>
-
-//         {!user ? (
-//           <>
-//             <Link to="/login">Login</Link>
-//             <Link to="/signup">Signup</Link>
-//           </>
-//         ) : (
-//           <>
-//             <Link to="/profile">Profile</Link>
-//             <button onClick={logout}>Logout</button>
-//           </>
-//         )}
-//       </div>
-//     </nav>
-//   );
-// }

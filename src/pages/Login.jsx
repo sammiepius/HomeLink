@@ -207,47 +207,4 @@ export default function Login() {
 //   );
 // }
 
-// import { useAuth } from '../context/AuthContext';
-// import { useNavigate } from 'react-router-dom';
-// import { useState } from 'react';
-
-// export default function Login() {
-//   const { login } = useAuth();
-//   const navigate = useNavigate();
-//   // const [role, setRole] = useState('tenant');
-
-//   const handleLogin = (e) => {
-//     e.preventDefault();
-//     login('sammiepius@gmail.com');
-
-//     // Redirect based on role
-//     // if (role === 'landlord') {
-//     //   navigate('/landlord');
-//     // } else {
-//       navigate('/profile');
-//     // }
-//   };
-
-//   return (
-//     <div className="p-8 max-w-md mx-auto">
-//       <h2 className="text-2xl font-bold mb-4">Login</h2>
-//       <form onSubmit={handleLogin} className="flex flex-col gap-4">
-//         <input type="email" placeholder="Email" className="border p-2" />
-//         <input type="password" placeholder="Password" className="border p-2" />
-
-//         {/* Role Selection */}
-//         {/* <select
-//           value={role}
-//           onChange={(e) => setRole(e.target.value)}
-//           className="border p-2">
-//           <option value="tenant">Tenant</option>
-//           <option value="landlord">Landlord</option>
-//         </select> */}
-
-//         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-//           Login
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
+/

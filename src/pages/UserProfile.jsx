@@ -3,7 +3,7 @@ import Button from '../components/ui/Button';
 
 export default function UserProfile() {
   return (
-    <section className="min-h-screen bg-gray-50 py-12 px-6 flex justify-center">
+    <section className="min-h-screen bg-gray-50 py-12 px-6 pt-20 flex justify-center">
       <div className="w-full max-w-3xl space-y-8">
         {/* Profile Info */}
         <Card>

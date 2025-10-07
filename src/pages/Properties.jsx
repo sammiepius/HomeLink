@@ -3,14 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 export default function Listings() {
   const navigate = useNavigate();
-  const { type } = useParams(); // can be "rent", "buy", or undefined
+  const { type } = useParams(); // can be "rent", "buy", or
 
   // Dummy property data
   const properties = [
     {
       id: 1,
       title: '2 Bedroom Apartment',
-      price: '150000',
+      price: '150,000',
       location: 'Lagos, Nigeria',
       description: 'Spacious apartment with modern finish.',
       type: 'rent',
@@ -21,7 +21,7 @@ export default function Listings() {
     {
       id: 2,
       title: 'Luxury Duplex',
-      price: '500000',
+      price: '500,000',
       location: 'Abuja, Nigeria',
       description: '5-bedroom duplex in a secure estate.',
       type: 'buy',
@@ -32,7 +32,7 @@ export default function Listings() {
     {
       id: 3,
       title: 'Single Room Self-Contain',
-      price: '80000',
+      price: '80,000',
       location: 'Ibadan, Nigeria',
       description: 'Affordable single room for students.',
       type: 'rent',
@@ -57,7 +57,7 @@ export default function Listings() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6 pt-20">
       <h1 className="text-2xl font-bold mb-6">
         {filter === 'rent'
           ? 'Properties for Rent'

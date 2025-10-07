@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  // const { user, logout } = useAuth ;
+  const auth = useAuth();
+  console.log(auth)
+  const { user, login, logout } = auth || {};
+  console.log(user)
+
   const isHome = location.pathname === '/';
 
   useEffect(
@@ -36,16 +43,18 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <img
-              src="/homelink-logo.png" // replace with your logo path
+              src="src\assets/home.png" // replace with your logo path
               alt="HomeLink"
-              className="h-8 w-8"
+              className="h-18 w-18 cursor-pointer"
+              onClick={() => navigate('/')}
             />
-            <span
+            {/* <span
+
               className={`text-xl font-bold ${
                 scrolled ? 'text-gray-800' : 'text-white'
               }`}>
               HomeLink
-            </span>
+            </span> */}
           </div>
 
           {/* Desktop Menu */}
@@ -53,7 +62,7 @@ export default function Navbar() {
             <div
               href="#properties"
               onClick={() => navigate('/properties')}
-              className={`cursor-pointer font-medium 
+              className={`cursor-pointer font-medium
                 ${
                   isHome
                     ? scrolled
@@ -103,24 +112,57 @@ export default function Navbar() {
             </div> */}
 
             {/* Auth Buttons */}
-            <div className="flex items-center space-x-4">
-              <div
-                href="login"
-                onClick={() => navigate('/login')}
-                className={`cursor-pointer font-medium ${
-                  scrolled
-                    ? 'text-gray-600 hover:text-teal-600'
-                    : 'text-white hover:text-teal-200'
-                }`}>
-                Login
-              </div>
-              <div
-                href="#signup"
-                onClick={() => navigate('/signup')}
-                className="cursor-pointer px-4 py-2 rounded-full bg-teal-600 text-white font-semibold hover:bg-teal-700 transition">
-                Sign Up
-              </div>
-            </div>
+            {!user ? (
+              <>
+                <div className="flex items-center space-x-4">
+                  <div
+                    href="login"
+                    onClick={() => navigate('/login')}
+                    className={`cursor-pointer font-medium  ${
+                      isHome
+                        ? scrolled
+                          ? 'text-gray-600 hover:text-teal-600'
+                          : 'text-white hover:text-teal-200'
+                        : 'text-gray-600 hover:text-teal-600'
+                    }`}
+                    // className="cursor-pointer px-4 py-2 text-sm font-medium text-gray-600 border rounded-lg hover:bg-teal-100"
+                  >
+                    Login
+                  </div>
+                  <div
+                    href="#signup"
+                    onClick={() => navigate('/signup')}
+                    className="cursor-pointer px-4 py-2 border rounded-lg bg-teal-600 text-white font-semibold hover:bg-teal-700 transition">
+                    Sign Up
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center space-x-4">
+                  <div
+                    href="login"
+                    // onClick={() => navigate('/login')}
+                    className={`cursor-pointer font-medium  ${
+                      isHome
+                        ? scrolled
+                          ? 'text-gray-600 hover:text-teal-600'
+                          : 'text-white hover:text-teal-200'
+                        : 'text-gray-600 hover:text-teal-600'
+                    }`}
+                    // className="cursor-pointer px-4 py-2 text-sm font-medium text-gray-600 border rounded-lg hover:bg-teal-100"
+                  >
+                    Profile
+                  </div>
+                  <div
+                    href=""
+                    onClick={logout}
+                    className="cursor-pointer px-4 py-2 border rounded-lg bg-teal-600 text-white font-semibold hover:bg-teal-700 transition">
+                    Logout
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -197,3 +239,32 @@ export default function Navbar() {
     </nav>
   );
 }
+
+// import { Link } from 'react-router-dom';
+// import { useAuth } from '../context/AuthContext';
+
+// export default function Navbar() {
+//   const { user, logout } = useAuth();
+
+//   return (
+//     <nav className="flex justify-between items-center p-4 bg-white shadow">
+//       <h1 className="text-xl font-bold">HomeLink</h1>
+//       <div className="flex gap-4">
+//         <Link to="/">Home</Link>
+//         <Link to="/listings">Listings</Link>
+
+//         {!user ? (
+//           <>
+//             <Link to="/login">Login</Link>
+//             <Link to="/signup">Signup</Link>
+//           </>
+//         ) : (
+//           <>
+//             <Link to="/profile">Profile</Link>
+//             <button onClick={logout}>Logout</button>
+//           </>
+//         )}
+//       </div>
+//     </nav>
+//   );
+// }

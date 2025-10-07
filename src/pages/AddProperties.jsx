@@ -37,7 +37,7 @@ export default function AddProperty() {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gray-50 px-6">
+    <section className="min-h-screen flex items-center justify-center bg-gray-50 px-6 pt-20">
       <div className="bg-white w-full max-w-2xl rounded-2xl shadow-md p-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
           🏡 Add New Property

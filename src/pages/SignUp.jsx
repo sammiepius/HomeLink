@@ -37,7 +37,7 @@ export default function Signup() {
   };
 
   return (
-    <section className="min-h-screen flex">
+    <section className="min-h-screen flex pt-20">
       {/* Left side (branding) */}
       <div className="hidden md:flex flex-1 bg-teal-600 text-white items-center justify-center p-12">
         <div className="max-w-md">

@@ -10,7 +10,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   // const { user, logout } = useAuth ;
   const auth = useAuth();
-  console.log(auth)
+  // console.log(auth)
   const { user, login, logout } = auth || {};
   console.log(user)
 

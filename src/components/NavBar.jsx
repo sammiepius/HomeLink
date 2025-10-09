@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { ChevronDown, LogOut, Menu, Settings, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
@@ -8,6 +9,8 @@ export default function Navbar() {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+  const [openDropdown, setOpenDropdown] = useState(false);
   // const { user, logout } = useAuth ;
   const auth = useAuth();
   // console.log(auth)
@@ -28,6 +31,27 @@ export default function Navbar() {
     [],
     [isHome]
   );
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  const getInitials = (email) => {
+    if (!email) return '?';
+    return email.charAt(0).toUpperCase();
+  };
 
   return (
     <nav
@@ -138,30 +162,55 @@ export default function Navbar() {
                 </div>
               </>
             ) : (
-              <>
-                <div className="flex items-center space-x-4">
-                  <div
-                    href="login"
-                    // onClick={() => navigate('/login')}
-                    className={`cursor-pointer font-medium  ${
-                      isHome
-                        ? scrolled
-                          ? 'text-gray-600 hover:text-teal-600'
-                          : 'text-white hover:text-teal-200'
-                        : 'text-gray-600 hover:text-teal-600'
+              <div className="relative" ref={dropdownRef}>
+                {/* Profile Toggle */}
+                <div
+                  className="flex items-center space-x-2 cursor-pointer bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200 transition"
+                  onClick={() => setOpenDropdown(!openDropdown)}>
+                  {/* Avatar / Initial */}
+                  <div className="w-8 h-8 flex items-center justify-center bg-teal-600 text-white font-semibold rounded-full">
+                    {getInitials(user.email)}
+                  </div>
+                  {/* <span className="font-medium text-gray-700">
+                    {user.email.split('@')[0]}
+                  </span> */}
+                  <ChevronDown
+                    size={18}
+                    className={`text-gray-600 transition-transform ${
+                      openDropdown ? 'rotate-180' : ''
                     }`}
-                    // className="cursor-pointer px-4 py-2 text-sm font-medium text-gray-600 border rounded-lg hover:bg-teal-100"
-                  >
-                    Profile
-                  </div>
-                  <div
-                    href=""
-                    onClick={logout}
-                    className="cursor-pointer px-4 py-2 border rounded-lg bg-teal-600 text-white font-semibold hover:bg-teal-700 transition">
-                    Logout
-                  </div>
+                  />
                 </div>
-              </>
+
+                {/* Animated Dropdown */}
+                <AnimatePresence>
+                  {openDropdown && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute right-0 mt-2 w-52 bg-white shadow-lg rounded-lg py-2 border border-gray-100">
+                      <div
+                        onClick={() => {
+                          setOpenDropdown(false);
+                          navigate('/profile');
+                        }}
+                        className="flex items-center px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 cursor-pointer">
+                        <Settings size={16} className="mr-2" />
+                        Account Settings
+                      </div>
+
+                      <div
+                        onClick={handleLogout}
+                        className="flex items-center px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 cursor-pointer">
+                        <LogOut size={16} className="mr-2" />
+                        Logout
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             )}
           </div>
 
@@ -169,7 +218,7 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setOpen(!open)}
-              className={scrolled ? 'text-gray-700' : 'text-white'}>
+              className={scrolled ? 'text-gray-900' : 'text-white'}>
               {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
@@ -182,58 +231,91 @@ export default function Navbar() {
           className={`md:hidden px-4 pb-4 space-y-3 ${
             scrolled ? 'bg-white' : 'bg-gray-900'
           }`}>
-          <a
-            href="#rent"
-            className={`block ${
+          <div
+            href="#properties"
+            onClick={() => navigate('/properties')}
+            className={`cursor-pointer font-medium
+                ${
+                  scrolled
+                    ? 'text-gray-600 hover:text-teal-600'
+                    : 'text-white hover:text-teal-200'
+                }`}>
+            Properties
+          </div>
+          <div
+            onClick={() => navigate('/listings/rent')}
+            className={`cursor-pointer font-medium  ${
               scrolled
                 ? 'text-gray-600 hover:text-teal-600'
                 : 'text-white hover:text-teal-200'
             }`}>
-            Rent
-          </a>
-          <a
-            href="#buy"
-            className={`block ${
+            For Rent
+          </div>
+          <div
+            onClick={() => navigate('/listings/buy')}
+            // to="/listings/buy"
+            href="#listing"
+            // onClick={() => navigate('/landlord')}
+            className={`cursor-pointer font-medium ${
               scrolled
                 ? 'text-gray-600 hover:text-teal-600'
                 : 'text-white hover:text-teal-200'
             }`}>
-            Buy
-          </a>
-          <a
-            href="#about"
-            className={`block ${
-              scrolled
-                ? 'text-gray-600 hover:text-teal-600'
-                : 'text-white hover:text-teal-200'
-            }`}>
-            About
-          </a>
-          <a
-            href="#contact"
-            className={`block ${
-              scrolled
-                ? 'text-gray-600 hover:text-teal-600'
-                : 'text-white hover:text-teal-200'
-            }`}>
-            Contact
-          </a>
+            For Sale
+          </div>
 
           {/* Auth Buttons */}
-          <a
-            href="#login"
-            className={`block font-medium ${
-              scrolled
-                ? 'text-gray-600 hover:text-teal-600'
-                : 'text-white hover:text-teal-200'
-            }`}>
-            Login
-          </a>
-          <a
-            href="#signup"
-            className="block w-full text-center px-4 py-2 rounded-full bg-teal-600 text-white font-semibold hover:bg-teal-700 transition">
-            Sign Up
-          </a>
+          {!user ? (
+            <>
+              <div className="flex items-center space-x-4">
+                <div
+                  href="login"
+                  onClick={() => navigate('/login')}
+                  className={`cursor-pointer font-medium  ${
+                    isHome
+                      ? scrolled
+                        ? 'text-gray-600 hover:text-teal-600'
+                        : 'text-white hover:text-teal-200'
+                      : 'text-gray-600 hover:text-teal-600'
+                  }`}
+                  // className="cursor-pointer px-4 py-2 text-sm font-medium text-gray-600 border rounded-lg hover:bg-teal-100"
+                >
+                  Login
+                </div>
+                <div
+                  href="#signup"
+                  onClick={() => navigate('/signup')}
+                  className="cursor-pointer px-4 py-2 border rounded-lg bg-teal-600 text-white font-semibold hover:bg-teal-700 transition">
+                  Sign Up
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center space-x-4">
+                <div
+                  href="login"
+                  // onClick={() => navigate('/login')}
+                  className={`cursor-pointer font-medium  ${
+                    isHome
+                      ? scrolled
+                        ? 'text-gray-600 hover:text-teal-600'
+                        : 'text-white hover:text-teal-200'
+                      : 'text-gray-600 hover:text-teal-600'
+                  }`}
+                  // className="cursor-pointer px-4 py-2 text-sm font-medium text-gray-600 border rounded-lg hover:bg-teal-100"
+                >
+                  Profile
+                </div>
+                <div
+                  href=""
+                  onClick={handleLogout}
+                  className="cursor-pointer px-4 py-2 border rounded-lg bg-teal-600 text-white font-semibold hover:bg-teal-700 transition">
+                  Logout
+                </div>
+              </div>
+            </>
+          )}
         </div>
       )}
     </nav>

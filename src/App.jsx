@@ -12,10 +12,12 @@ import Properties from './pages/Properties';
 import PropertyDetails from './pages/PropertyDetails';
 import Navbar from './components/NavBar';
 import ProtectedRoute from './components/ProtectedRoute';
+import { Toaster } from 'sonner';
 
 function App() {
   return (
     <Router>
+      <Toaster richColors position='top-right'/>
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />

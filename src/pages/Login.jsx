@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 // import axios from 'axios';
 import API from '../api/axios';
+import { toast } from 'sonner';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -31,10 +32,9 @@ export default function Login() {
 
       login(user, token);
       // navigate('/profile');
-
+      toast.success(`Welcome back, ${user.name}!`);
       if (res.data.user.role === 'LANDLORD') {
         navigate('/landlord');
-        // alert(`Welcome back, ${user.name}!`);
       } else {
         navigate('/profile');
       }
@@ -44,7 +44,7 @@ export default function Login() {
       // window.location.href = '/add-property';
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || 'Login failed!');
+      toast.error(error.response?.data?.message || 'Invalid credential!');
     } finally {
       setLoading(false);
     }

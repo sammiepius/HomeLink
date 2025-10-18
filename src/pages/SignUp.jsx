@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
+import { toast } from 'sonner';
 
 export default function Signup() {
   const [form, setForm] = useState({
@@ -24,30 +25,29 @@ export default function Signup() {
     setError('');
 
     if (!form.name || !form.email || !form.password || !form.confirm) {
-      setError('All fields are required.');
+      toast.error('All fields are required.');
       return;
     }
     if (form.password !== form.confirm) {
-      setError('Passwords do not match.');
+      toast.error('Passwords do not match.');
       return;
     }
     if (!form.role) {
-      setError('Please select your role.');
+      toast.error('Please select your role.');
       return;
     }
     // TODO: hook into backend later
     try {
       const res = await API.post('auth/signup', form);
-      alert('Signup successful! Please log in.');
+      toast.success('Signup successful! Please log in.');
       navigate('/login');
       console.log(res.data);
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || 'Signup failed!');
+      toast.error(error.response?.data?.message || 'Signup failed!');
     } finally {
       setLoading(false);
     }
-    console.log('Signup submitted:', form);
   };
 
   return (
@@ -70,11 +70,11 @@ export default function Signup() {
             Create Account
           </h2>
 
-          {error && (
+          {/* {error && (
             <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
               {error}
             </div>
-          )}
+          )} */}
 
           <form onSubmit={handleSubmit} className=" grid gap-4">
             <input

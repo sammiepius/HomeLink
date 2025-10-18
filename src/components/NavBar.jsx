@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { ChevronDown, LogOut, Menu, Settings, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -12,7 +12,7 @@ export default function Navbar() {
   const dropdownRef = useRef(null);
   const [openDropdown, setOpenDropdown] = useState(false);
   // const { user, logout } = useAuth ;
-  const auth = useAuth();
+  const auth = useContext(AuthContext);
   // console.log(auth)
   const { user, login, logout } = auth || {};
   console.log(user);

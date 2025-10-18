@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import API from '../api/axios';
 
 export default function Signup() {
   const [form, setForm] = useState({
@@ -7,16 +9,17 @@ export default function Signup() {
     email: '',
     password: '',
     confirm: '',
-    role: 'user'
+    role: 'TENANT',
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -33,6 +36,17 @@ export default function Signup() {
       return;
     }
     // TODO: hook into backend later
+    try {
+      const res = await API.post('auth/signup', form);
+      alert('Signup successful! Please log in.');
+      navigate('/login');
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || 'Signup failed!');
+    } finally {
+      setLoading(false);
+    }
     console.log('Signup submitted:', form);
   };
 
@@ -104,8 +118,8 @@ export default function Signup() {
                   <input
                     type="radio"
                     name="role"
-                    value="user"
-                    checked={form.role === 'user'}
+                    value="TENANT"
+                    checked={form.role === 'TENANT'}
                     onChange={handleChange}
                     className="text-teal-600 focus:ring-teal-500"
                   />
@@ -116,8 +130,8 @@ export default function Signup() {
                   <input
                     type="radio"
                     name="role"
-                    value="landlord"
-                    checked={form.role === 'landlord'}
+                    value="LANDLORD"
+                    checked={form.role === 'LANDLORD'}
                     onChange={handleChange}
                     className="text-teal-600 focus:ring-teal-500"
                   />

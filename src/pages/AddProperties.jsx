@@ -8,7 +8,7 @@ export default function AddProperty() {
     description: '',
     bedrooms: '',
     bathrooms: '',
-    house_for: 'rent',
+    type: 'rent',
     images: [],
   });
   const [error, setError] = useState('');
@@ -109,9 +109,9 @@ export default function AddProperty() {
               <label className="flex items-center space-x-2">
                 <input
                   type="radio"
-                  name="house_for"
+                  name="type"
                   value="rent"
-                  checked={form.house_for === 'rent'}
+                  checked={form.type === 'rent'}
                   onChange={handleChange}
                   className="text-teal-600 focus:ring-teal-500"
                 />
@@ -121,9 +121,9 @@ export default function AddProperty() {
               <label className="flex items-center space-x-2">
                 <input
                   type="radio"
-                  name="house_for"
+                  name="type"
                   value="sale"
-                  checked={form.house_for === 'sale'}
+                  checked={form.type === 'sale'}
                   onChange={handleChange}
                   className="text-teal-600 focus:ring-teal-500"
                 />

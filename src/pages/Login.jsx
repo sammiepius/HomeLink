@@ -1,42 +1,53 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
+// import axios from 'axios';
+import API from '../api/axios';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   // const [role, setRole] = useState('tenant');
-  const { login } = useAuth();
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login('sammiepius@gmail.com');
     setError('');
 
     if (!form.email || !form.password) {
       setError('Email and password are required.');
       return;
     }
-    navigate('/profile');
+    // navigate('/profile');
 
-    // TODO: Replace this with backend authentication
-    // Example hardcoded login for now:
-    // let mockUser = {
-    //   email: form.email,
-    //   role: form.email.includes("landlord") ? "landlord" : "user",
-    // };
+    try {
+      const res = await API.post('/auth/login', form);
+      const { token, user } = res.data;
 
-    // // Redirect based on role
-    // if (mockUser.role === "landlord") {
-    //   navigate("/landlord");
-    // } else {
-    //   navigate("/profile");
-    // }
+      login(user, token);
+      // navigate('/profile');
+
+      if (res.data.user.role === 'LANDLORD') {
+        navigate('/landlord');
+        // alert(`Welcome back, ${user.name}!`);
+      } else {
+        navigate('/profile');
+      }
+      // console.log('Logged in:', user);
+
+      // Redirect (optional)
+      // window.location.href = '/add-property';
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || 'Login failed!');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -206,4 +217,3 @@ export default function Login() {
 //     </section>
 //   );
 // }
-

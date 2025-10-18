@@ -11,6 +11,7 @@ import AddProperty from './pages/AddProperties';
 import Properties from './pages/Properties';
 import PropertyDetails from './pages/PropertyDetails';
 import Navbar from './components/NavBar';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -24,8 +25,17 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/landlord" element={<LandlordProfile />} />
         <Route path="/profile" element={<UserProfile />} />
-        <Route path="/addproperties" element={<AddProperty />} />
         <Route path="/properties" element={<Properties />} />
+        <Route
+          path="/addproperties"
+          element={
+            <ProtectedRoute allowedRoles={['LANDLORD']}>
+              <AddProperty />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path='"/unauthorized' element={<h1>Unauthorized Access</h1>} />
       </Routes>
     </Router>
   );

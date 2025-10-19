@@ -172,7 +172,7 @@ export default function Navbar() {
                     {getInitials(user.email)}
                   </div>
                   {/* <span className="font-medium text-gray-700">
-                    {user.email.split('@')[0]}
+                    {user.name.split('@')[0]}
                   </span> */}
                   <ChevronDown
                     size={18}

@@ -17,7 +17,7 @@ import { Toaster } from 'sonner';
 function App() {
   return (
     <Router>
-      <Toaster richColors position='top-right'/>
+      <Toaster richColors position="top-right" />
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />

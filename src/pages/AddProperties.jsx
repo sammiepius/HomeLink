@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState } from 'react';
 
 export default function AddProperty() {
@@ -12,6 +13,8 @@ export default function AddProperty() {
     images: [],
   });
   const [error, setError] = useState('');
+  const [preview, setPreview] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -19,21 +22,104 @@ export default function AddProperty() {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
+
+    setForm((prevForm) => ({
+      ...prevForm,
+      images: [...prevForm.images, ...files], // ✅ keep actual File objects
+    }));
+
+    // Separate preview state just for showing thumbnails
     const previewUrls = files.map((file) => URL.createObjectURL(file));
-    setForm({ ...form, images: previewUrls });
+    setPreview((prev) => [...prev, ...previewUrls]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
+
+    const token = localStorage.getItem('token');
 
     if (!form.title || !form.location || !form.price || !form.description) {
       setError('Please fill in all required fields.');
       return;
     }
 
-    // TODO: Save to backend later
-    console.log('Property added:', form);
+    if (form.images.length === 0) {
+      setError('Please upload at least one image.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Step 1️⃣ — Upload images to Cloudinary via backend
+      const uploadData = new FormData();
+      form.images.forEach((file) => uploadData.append('images', file));
+
+      const uploadRes = await axios.post(
+        'http://localhost:5000/api/upload',
+        uploadData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          // Authorization: `Bearer ${token}`,
+        }
+      );
+
+      const uploadedUrls = uploadRes.data.urls;
+
+      // Step 2️⃣ — Send property details to backend
+      const propertyData = {
+        title: form.title,
+        location: form.location,
+        price: parseFloat(form.price),
+        description: form.description,
+        bedrooms: parseInt(form.bedrooms) || null,
+        bathrooms: parseInt(form.bathrooms) || null,
+        type: form.type,
+        images: uploadedUrls,
+      };
+
+      const res = await axios.post(
+        'http://localhost:5000/api/properties/add',
+        propertyData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            // Uncomment if your backend uses JWT auth
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.status === 201 || res.status === 200) {
+        alert('✅ Property added successfully!');
+        console.log(res.data);
+        setForm({
+          title: '',
+          location: '',
+          price: '',
+          description: '',
+          bedrooms: '',
+          bathrooms: '',
+          type: 'rent',
+          images: [],
+        });
+        setPreview([]);
+      } else {
+        setError(res.data.message || 'Something went wrong.');
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.response?.data?.message?.includes('jwt expires')) {
+        alert('Session expired. please login again')
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return
+      }
+      setError('❌ Failed to add property.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -151,13 +237,12 @@ export default function AddProperty() {
               onChange={handleImageUpload}
               className="w-full p-3 border rounded-lg focus:outline-none cursor-pointer focus:ring-2 focus:ring-teal-500"
             />
-
-            {/* Preview Images */}
-            {form.images.length > 0 && (
+            {/* Preview */}
+            {preview.length > 0 && (
               <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
-                {form.images.map((img, index) => (
+                {preview.map((img, i) => (
                   <img
-                    key={index}
+                    key={i}
                     src={img}
                     alt="preview"
                     className="w-full h-32 object-cover rounded-lg shadow-md"

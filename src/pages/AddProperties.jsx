@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function AddProperty() {
   const [form, setForm] = useState({
@@ -92,7 +93,7 @@ export default function AddProperty() {
       );
 
       if (res.status === 201 || res.status === 200) {
-        alert('✅ Property added successfully!');
+        toast.success('✅ Property added successfully!');
         console.log(res.data);
         setForm({
           title: '',
@@ -116,7 +117,7 @@ export default function AddProperty() {
         window.location.href = '/login';
         return
       }
-      setError('❌ Failed to add property.');
+      toast.error('❌ Failed to add property.');
     } finally {
       setLoading(false);
     }

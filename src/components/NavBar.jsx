@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { ChevronDown, LogOut, Menu, Settings, X } from 'lucide-react';
+import { ChevronDown, Eye, LogOut, Menu, Settings, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
@@ -197,8 +197,9 @@ export default function Navbar() {
                           navigate('/profile');
                         }}
                         className="flex items-center px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 cursor-pointer">
-                        <Settings size={16} className="mr-2" />
-                        Account Settings
+                        <Eye size={16} className="mr-2" />
+                        {/* Account Settings */}
+                        View Profile
                       </div>
 
                       <div

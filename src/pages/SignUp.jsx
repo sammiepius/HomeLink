@@ -8,6 +8,7 @@ export default function Signup() {
   const [form, setForm] = useState({
     name: '',
     email: '',
+    phone: '',
     password: '',
     confirm: '',
     role: 'TENANT',
@@ -24,7 +25,13 @@ export default function Signup() {
     e.preventDefault();
     setError('');
 
-    if (!form.name || !form.email || !form.password || !form.confirm) {
+    if (
+      !form.name ||
+      !form.email ||
+      !form.phone ||
+      !form.password ||
+      !form.confirm
+    ) {
       toast.error('All fields are required.');
       return;
     }
@@ -51,7 +58,7 @@ export default function Signup() {
   };
 
   return (
-    <section className="min-h-screen flex pt-20">
+    <section className="min-h-screen flex pt-18">
       {/* Left side (branding) */}
       <div className="hidden md:flex flex-1 bg-teal-600 text-white items-center justify-center p-12">
         <div className="max-w-md">
@@ -65,7 +72,7 @@ export default function Signup() {
 
       {/* Right side (form) */}
       <div className="flex-1 flex items-center justify-center bg-gray-50 px-6">
-        <div className="bg-white w-full max-w-md rounded-2xl shadow-md p-8">
+        <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
             Create Account
           </h2>
@@ -76,14 +83,14 @@ export default function Signup() {
             </div>
           )} */}
 
-          <form onSubmit={handleSubmit} className=" grid gap-4">
+          <form onSubmit={handleSubmit} className="grid gap-4">
             <input
               type="text"
               name="name"
               value={form.name}
               onChange={handleChange}
               placeholder="Full Name"
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 space-y-4"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <input
               type="email"
@@ -91,6 +98,15 @@ export default function Signup() {
               value={form.email}
               onChange={handleChange}
               placeholder="Email"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            />
+
+            <input
+              type="number"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="phone number"
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <input

@@ -192,8 +192,10 @@
 
 import { useState } from 'react';
 import { Edit, Eye, PlusCircle, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LandlordDashboard() {
+  const navigate = useNavigate();
   const [landlord] = useState({
     name: 'Jane Smith',
     email: 'janesmith@email.com',
@@ -254,18 +256,21 @@ export default function LandlordDashboard() {
             <p className="text-gray-600 mt-1">{landlord.email}</p>
             <p className="text-gray-600 mt-1">{landlord.phone}</p>
           </div>
-          <div className="flex px-5 py-3 text-gray-700 hover:text-teal-600 cursor-pointer">
+          <div
+            onClick={() => navigate('/landlordsettings')}
+            className="flex px-5 py-3 text-gray-700 hover:text-teal-600 cursor-pointer">
             <Settings size={16} className="mr-2" />
           </div>
         </div>
-
         {/* Property List */}
         <div className="mt-10">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-2xl font-semibold text-gray-800 mb-6">
               My Posted Apartments
             </h3>
-            <button className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition flex items-center gap-2">
+            <button
+              onClick={() => navigate('/addproperties')}
+              className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition flex items-center gap-2">
               <PlusCircle size={18} />
               Add Listing
             </button>

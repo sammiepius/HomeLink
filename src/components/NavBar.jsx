@@ -165,7 +165,7 @@ export default function Navbar() {
               <div className="relative" ref={dropdownRef}>
                 {/* Profile Toggle */}
                 <div
-                  className="flex items-center space-x-2 cursor-pointer bg-gray-100 px-3 py-2 rounded-lg hover:bg-gray-200 transition"
+                  className="flex items-center space-x-2 cursor-pointe px-3 py-2 rounded-lg cursor-pointer transition"
                   onClick={() => setOpenDropdown(!openDropdown)}>
                   {/* Avatar / Initial */}
                   <div className="w-8 h-8 flex items-center justify-center bg-teal-600 text-white font-semibold rounded-full">
@@ -174,12 +174,12 @@ export default function Navbar() {
                   {/* <span className="font-medium text-gray-700">
                     {user.name.split('@')[0]}
                   </span> */}
-                  <ChevronDown
+                  {/* <ChevronDown
                     size={18}
                     className={`text-gray-600 transition-transform ${
                       openDropdown ? 'rotate-180' : ''
                     }`}
-                  />
+                  /> */}
                 </div>
 
                 {/* Animated Dropdown */}

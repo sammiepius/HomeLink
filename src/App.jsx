@@ -12,6 +12,7 @@ import Properties from './pages/Properties';
 import PropertyDetails from './pages/PropertyDetails';
 import Navbar from './components/NavBar';
 import ProtectedRoute from './components/ProtectedRoute';
+import Settings from './pages/Settings';
 import { Toaster } from 'sonner';
 
 function App() {
@@ -26,6 +27,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/landlord" element={<LandlordProfile />} />
+        <Route
+          path="/landlordsettings"
+          element={<Settings role="Landlord" />}
+        />
+        <Route path="/usersettings" element={<Settings role="tenant" />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/properties" element={<Properties />} />
         <Route

@@ -194,7 +194,7 @@ export default function Navbar() {
                       <div
                         onClick={() => {
                           setOpenDropdown(false);
-                          navigate('/profile');
+                          navigate('/landlord');
                         }}
                         className="flex items-center px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 cursor-pointer">
                         <Eye size={16} className="mr-2" />

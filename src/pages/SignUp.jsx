@@ -162,7 +162,6 @@ export default function Signup() {
               Sign Up
             </button>
           </form>
-
           <p className="text-gray-600 text-sm mt-6 text-center">
             Already have an account?{' '}
             <a

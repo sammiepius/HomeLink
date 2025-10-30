@@ -177,7 +177,7 @@ export default function PropertyDetails() {
           <div className="flex flex-wrap gap-6 mb-8 text-gray-600">
             <span>🛏️ {property.bedrooms || 0} Bedrooms</span>
             <span>🛁 {property.bathrooms || 0} Bathrooms</span>
-            <span>📏 Spacious Apartment</span>
+            {/* <span>📏 Spacious Apartment</span> */}
           </div>
 
           {/* Description */}

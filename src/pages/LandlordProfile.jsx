@@ -7,27 +7,57 @@ export default function LandlordDashboard() {
   const navigate = useNavigate();
   const [avatar, setAvatar] = useState(null);
   const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [myProperties, setMyProperties] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem('token');
+        if (!token) return console.error('No token found');
+
         const res = await axios.get('http://localhost:5000/api/auth/me', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
+
         const itemData = res.data;
         setData(itemData);
 
         if (itemData.profilePhoto) setAvatar(itemData.profilePhoto);
-        console.log(data);
+
+        console.log('User data:', itemData); // ✅ log itemData instead of data
       } catch (err) {
-        console.error('Fail to load user data', err);
+        console.error('Failed to load user data:', err);
       }
     };
+
+    const fetchMyProperty = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return console.error('No token found');
+
+        const res = await axios.get(
+          'http://localhost:5000/api/properties/my-property',
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        setMyProperties(res.data);
+        console.log(res.data);
+      } catch (err) {
+        console.error('Error fetching property:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchUser();
+    fetchMyProperty();
   }, []);
+
+  if (loading)
+    return <p className="text-center text-gray-500 mt-10">Loading.....</p>;
 
   return (
     <section className="min-h-screen bg-gray-50 pt-24 px-6">
@@ -56,6 +86,7 @@ export default function LandlordDashboard() {
             <Settings size={16} className="mr-2" />
           </div>
         </div>
+
         {/* Property List */}
         <div className="mt-10">
           <div className="flex items-center justify-between mb-6">
@@ -71,38 +102,38 @@ export default function LandlordDashboard() {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {/* {properties.map((property) => ( */}
-            <div
-              // key={property.id}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-              <img
-                // src={property.image}
-                // alt={property.title}
-                className="h-48 w-full object-cover"
-              />
-              <div className="p-4">
-                <h4 className="text-lg font-semibold text-gray-800">
-                  {/* {property.title} */}
-                </h4>
-                <p className="text-gray-600 text-sm mt-1">
-                  {/* {property.location} */}
-                </p>
-                <p className="text-teal-600 font-bold mt-2">
-                  {/* {property.price} */}
-                </p>
-                <div className="flex justify-between mt-4">
-                  <button className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center gap-2 text-gray-700 text-sm">
-                    <Eye size={16} />
-                    View
-                  </button>
-                  <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center gap-2 text-sm">
-                    <Edit size={16} />
-                    Edit
-                  </button>
+            {myProperties.map((property) => (
+              <div
+                key={property.id}
+                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
+                <img
+                  src={property.images?.[0] || '/placeholder.jpg'}
+                  alt={property.title}
+                  className="h-48 w-full object-cover"
+                />
+                <div className="p-4">
+                  <h4 className="text-lg font-semibold text-gray-800">
+                    {property.title}
+                  </h4>
+                  <p className="text-gray-600 text-sm mt-1">
+                    {property.location}
+                  </p>
+                  <p className="text-teal-600 font-bold mt-2">
+                    {property.price}
+                  </p>
+                  <div className="flex justify-between mt-4">
+                    <button className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center gap-2 text-gray-700 text-sm">
+                      <Eye size={16} />
+                      View
+                    </button>
+                    <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center gap-2 text-sm">
+                      <Edit size={16} />
+                      Edit
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* ))} */}
+            ))}
           </div>
         </div>
       </div>

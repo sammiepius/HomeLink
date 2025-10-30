@@ -6,43 +6,7 @@ import axios from 'axios';
 export default function LandlordDashboard() {
   const navigate = useNavigate();
   const [avatar, setAvatar] = useState(null);
-  const [form, setForm] = useState({});
-
-
-  // const [properties] = useState([
-  //   {
-  //     id: 1,
-  //     title: '3-Bedroom Duplex',
-  //     price: '₦2,500,000',
-  //     location: 'Abuja',
-  //     image:
-  //       'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
-  //   },
-  //   {
-  //     id: 2,
-  //     title: '1-Bedroom Flat',
-  //     price: '₦900,000',
-  //     location: 'Lagos',
-  //     image:
-  //       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-  //   },
-  //   {
-  //     id: 2,
-  //     title: '1-Bedroom Flat',
-  //     price: '₦900,000',
-  //     location: 'Lagos',
-  //     image:
-  //       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-  //   },
-  //   {
-  //     id: 2,
-  //     title: '1-Bedroom Flat',
-  //     price: '₦900,000',
-  //     location: 'Lagos',
-  //     image:
-  //       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-  //   },
-  // ]);
+  const [data, setData] = useState({});
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -53,15 +17,10 @@ export default function LandlordDashboard() {
             Authorization: `Bearer ${token}`,
           },
         });
-        const data = res.data;
-        setForm({
-          name: data.name || '',
-          email: data.email || '',
-          phone: data.phone || '',
-          profilePhoto: null,
-        });
+        const itemData = res.data;
+        setData(itemData);
 
-        if (data.profilePhoto) setAvatar(data.profilePhoto);
+        if (itemData.profilePhoto) setAvatar(itemData.profilePhoto);
         console.log(data);
       } catch (err) {
         console.error('Fail to load user data', err);
@@ -87,9 +46,9 @@ export default function LandlordDashboard() {
             </div>
           )}
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-3xl font-bold text-gray-800">{form.name}</h2>
-            <p className="text-gray-600 mt-1">{form.email}</p>
-            <p className="text-gray-600 mt-1">{form.phone}</p>
+            <h2 className="text-3xl font-bold text-gray-800">{data.name}</h2>
+            <p className="text-gray-600 mt-1">{data.email}</p>
+            <p className="text-gray-600 mt-1">{data.phone}</p>
           </div>
           <div
             onClick={() => navigate('/landlordsettings')}

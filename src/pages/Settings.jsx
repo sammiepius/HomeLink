@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Lock, ArrowLeft } from 'lucide-react';
+import { User, Lock, ArrowLeft, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 export default function Settings({ role = 'Landlord' }) {
   const [form, setForm] = useState({
@@ -12,6 +13,12 @@ export default function Settings({ role = 'Landlord' }) {
     role: '',
     profilePhoto: '',
   });
+  const [change, setChange] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
   const [activeTab, setActiveTab] = useState('profile');
   const [avatar, setAvatar] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -19,6 +26,10 @@ export default function Settings({ role = 'Landlord' }) {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handlePasswordChange = (e) => {
+    setChange({ ...change, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
@@ -66,23 +77,40 @@ export default function Settings({ role = 'Landlord' }) {
     }
 
     try {
-      const res = await axios.put(
-        `http://localhost:5000/api/auth/update`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      alert('Profile updated successfully!');
+      await axios.put('http://localhost:5000/api/auth/update', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success('Profile updated successfully!');
       navigate('/landlord');
     } catch (err) {
       console.error(err);
-      alert('Failed to update profile');
+      toast.error('Failed to update profile');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePasswordChangeSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    try {
+      await axios.put(
+        'http://localhost:5000/api/auth/change-password',
+        {
+          currentPassword: change.currentPassword,
+          newPassword: change.newPassword,
+        },
+        {
+          headers: { Authorization: ` Bearer ${token}` },
+        }
+      );
+      toast.success('Password updated successfully!');
+      setChange({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to change password');
     }
   };
 
@@ -97,9 +125,6 @@ export default function Settings({ role = 'Landlord' }) {
         </button>
 
         {/* Header */}
-        {/* <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 text-center mb-2 mt-4">
-          {role} Account Settings
-        </h2> */}
         <p className="text-center text-gray-500 mb-6 text-sm">
           Manage your profile, security, and preferences.
         </p>
@@ -145,7 +170,11 @@ export default function Settings({ role = 'Landlord' }) {
                 handleSubmit={handleSubmit}
               />
             ) : (
-              <SecurityTab />
+              <SecurityTab
+                handlePasswordChange={handlePasswordChange}
+                handlePasswordChangeSubmit={handlePasswordChangeSubmit}
+                change={change}
+              />
             )}
           </motion.div>
         )}
@@ -153,6 +182,7 @@ export default function Settings({ role = 'Landlord' }) {
     </div>
   );
 }
+
 /* ------------------- Skeleton Loader ------------------- */
 const SkeletonLoader = () => (
   <div className="animate-pulse space-y-5">
@@ -170,6 +200,7 @@ const SkeletonLoader = () => (
     </div>
   </div>
 );
+
 /* ------------------- Profile Info Tab ------------------- */
 const ProfileInfoTab = ({
   avatar,
@@ -208,28 +239,20 @@ const ProfileInfoTab = ({
       </div>
 
       {/* Inputs */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> */}
       <div className="grid gap-4">
         <input
           type="text"
           name="name"
           value={form.name}
           onChange={handleChange}
-          placeholder="change name"
+          placeholder="Change name"
           className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
         />
-        {/* <input
-          type="text"
-          placeholder="Last name"
-          className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
-        />
-      </div> */}
 
         <input
           type="email"
           name="email"
           value={form.email}
-          // onChange={handleChange}
           readOnly
           placeholder="Email address"
           className="bg-gray-100 border border-gray-200 rounded-lg px-4 py-2 text-sm w-full text-gray-400"
@@ -244,15 +267,6 @@ const ProfileInfoTab = ({
           className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
         />
 
-        {/* Optional landlord field
-        {role === 'Landlord' && (
-          <input
-            type="text"
-            placeholder="Business name (optional)"
-            className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
-          />
-        )} */}
-
         <div className="flex justify-end">
           <button
             type="submit"
@@ -266,29 +280,95 @@ const ProfileInfoTab = ({
 };
 
 /* ------------------- Security Tab ------------------- */
-const SecurityTab = () => {
+const SecurityTab = ({
+  change,
+  handlePasswordChange,
+  handlePasswordChangeSubmit,
+}) => {
+  const [showPassword, setShowPassword] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
+  const [shake, setShake] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const togglePassword = (field) => {
+    setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (change.newPassword !== change.confirmPassword) {
+      setShake(true);
+      toast.error('Passwords do not match');
+      setTimeout(() => setShake(false), 500);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await handlePasswordChangeSubmit(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const passwordField = (name, value, fieldKey, placeholder) => (
+    <motion.div
+      animate={shake ? { x: [-8, 8, -6, 6, -4, 4, 0] } : {}}
+      transition={{ duration: 0.4 }}
+      className="relative">
+      <input
+        type={showPassword[fieldKey] ? 'text' : 'password'}
+        name={name}
+        onChange={handlePasswordChange}
+        value={value}
+        placeholder={placeholder}
+        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+      />
+      <button
+        type="button"
+        onClick={() => togglePassword(fieldKey)}
+        className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+        {showPassword[fieldKey] ? <EyeOff size={18} /> : <Eye size={18} />}
+      </button>
+    </motion.div>
+  );
+
   return (
-    <form className="space-y-5 text-gray-700 grid gap-4">
-      <input
-        type="password"
-        placeholder="Current password"
-        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
-      />
-      <input
-        type="password"
-        placeholder="New password"
-        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
-      />
-      <input
-        type="password"
-        placeholder="Confirm new password"
-        className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
-      />
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-5 text-gray-700 grid gap-4">
+      {passwordField(
+        'currentPassword',
+        change.currentPassword,
+        'current',
+        'Current password'
+      )}
+      {passwordField('newPassword', change.newPassword, 'new', 'New password')}
+      {passwordField(
+        'confirmPassword',
+        change.confirmPassword,
+        'confirm',
+        'Confirm new password'
+      )}
+
       <div className="flex justify-end">
         <button
           type="submit"
-          className="bg-teal-600 hover:bg-teal-700 transition-all text-white font-medium px-6 py-2 rounded-lg">
-          Update Password
+          disabled={loading}
+          className={`flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 transition-all text-white font-medium px-6 py-2 rounded-lg ${
+            loading && 'opacity-70 cursor-not-allowed'
+          }`}>
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin" size={18} /> Updating...
+            </>
+          ) : (
+            'Update Password'
+          )}
         </button>
       </div>
     </form>

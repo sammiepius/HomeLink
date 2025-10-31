@@ -7,13 +7,15 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import LandlordProfile from './pages/LandlordProfile';
 import UserProfile from './pages/UserProfile';
-import AddProperty from './pages/AddProperties';
-import Properties from './pages/Properties';
-import PropertyDetails from './pages/PropertyDetails';
+import AddProperty from './pages/properties/AddProperties';
+import Properties from './pages/properties/Properties';
+// import Properties from './pages/properties/Properties';
+import PropertyDetails from './pages/properties/PropertyDetails';
 import Navbar from './components/NavBar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Settings from './pages/Settings';
 import { Toaster } from 'sonner';
+import EditProperty from './pages/properties/EditProperties';
 
 function App() {
   return (
@@ -39,6 +41,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['LANDLORD']}>
               <AddProperty />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/editproperties"
+          element={
+            <ProtectedRoute allowedRoles={['LANDLORD']}>
+              <EditProperty />
             </ProtectedRoute>
           }
         />

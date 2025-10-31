@@ -100,7 +100,7 @@ export default function LandlordDashboard() {
               Add Listing
             </button>
           </div>
-
+          <hr />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {myProperties.map((property) => (
               <div
@@ -119,14 +119,16 @@ export default function LandlordDashboard() {
                     {property.location}
                   </p>
                   <p className="text-teal-600 font-bold mt-2">
-                    {property.price}
+                    ₦{Number(property.price).toLocaleString()}
                   </p>
                   <div className="flex justify-between mt-4">
                     <button className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center gap-2 text-gray-700 text-sm">
                       <Eye size={16} />
                       View
                     </button>
-                    <button className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center gap-2 text-sm">
+                    <button
+                      onClick={() => navigate('/editproperties')}
+                      className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center gap-2 text-sm">
                       <Edit size={16} />
                       Edit
                     </button>

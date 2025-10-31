@@ -224,7 +224,7 @@ export default function Listings() {
         />
 
         <div className="flex gap-3">
-          {['all', 'rent', 'buy'].map((f) => (
+          {['all', 'rent', 'sale'].map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}

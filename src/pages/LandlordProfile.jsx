@@ -111,6 +111,7 @@ export default function LandlordDashboard() {
                   alt={property.title}
                   className="h-48 w-full object-cover"
                 />
+
                 <div className="p-4">
                   <h4 className="text-lg font-semibold text-gray-800">
                     {property.title}
@@ -127,7 +128,7 @@ export default function LandlordDashboard() {
                       View
                     </button>
                     <button
-                      onClick={() => navigate('/editproperties')}
+                      onClick={() => navigate(`/editproperties/${property.id}`)}
                       className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center gap-2 text-sm">
                       <Edit size={16} />
                       Edit

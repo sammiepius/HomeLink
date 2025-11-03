@@ -112,10 +112,10 @@ export default function AddProperty() {
     } catch (err) {
       console.error(err);
       if (err.response?.data?.message?.includes('jwt expires')) {
-        alert('Session expired. please login again')
+        alert('Session expired. please login again');
         localStorage.removeItem('token');
         window.location.href = '/login';
-        return
+        return;
       }
       toast.error('❌ Failed to add property.');
     } finally {
@@ -159,11 +159,11 @@ export default function AddProperty() {
 
           {/* Price */}
           <input
-            type="number"
             name="price"
             value={form.price}
             onChange={handleChange}
             placeholder="Price (₦)"
+            type="number"
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
 

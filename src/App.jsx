@@ -45,7 +45,7 @@ function App() {
           }
         />
         <Route
-          path="/editproperties"
+          path="/editproperties/:id"
           element={
             <ProtectedRoute allowedRoles={['LANDLORD']}>
               <EditProperty />

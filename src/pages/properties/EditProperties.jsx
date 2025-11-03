@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export default function EditListing() {
   const { id } = useParams();
+  console.log('property id:', id);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const token = localStorage.getItem('token');
 
   const [form, setForm] = useState({
@@ -18,51 +21,79 @@ export default function EditListing() {
     images: [],
   });
 
-//   useEffect(() => {
-//     // Fetch existing listing
-//     axios
-//       .get(`http://localhost:5000/api/listings/${id}`, {
-//         headers: { Authorization: ` Bearer ${token}` },
-//       })
-//       .then((res) => setForm(res.data))
-//       .catch((err) => console.error(err));
-//   }, [id]);
+  const [newImages, setNewImages] = useState([]);
+  const [previewImages, setPreviewImages] = useState([]);
+
+  // Fetch existing property
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/properties/${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setForm(res.data);
+        if (res.data.images) {
+          setPreviewImages(res.data.images);
+        }
+      } catch (error) {
+        toast.error('Failed to load property');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperty();
+  }, [id, token]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e) => {
-    setForm({ ...form, images: e.target.files });
+  // Handle new image uploads
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setNewImages(files);
+
+    // Create image previews
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setPreviewImages([...form.images, ...previews]);
   };
 
+  // Submit update
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form)
 
-    // const data = new FormData();
-    // for (let key in form) {
-    //   if (key !== 'images') data.append(key, form[key]);
-    // }
+    const formData = new FormData();
+    formData.append('title', property.title);
+    formData.append('description', property.description);
+    formData.append('price', property.price);
+    formData.append('location', property.location);
+    formData.append('type', property.type);
+    formData.append('bedrooms', property.bedrooms);
+    formData.append('bathrooms', property.bathrooms);
 
-    // for (let i = 0; i < form.images.length; i++) {
-    //   data.append('images', form.images[i]);
-    // }
+    // append only if new images are uploaded
+    newImages.forEach((file) => {
+      formData.append('images', file);
+    });
 
-    // try {
-    //   await axios.put('http://localhost:5000/api/listings/${id}', data, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    //   });
-
-    //   alert('Property updated successfully!');
-    //   navigate('/profile'); // back to landlord profile
-    // } catch (err) {
-    //   console.error(err);
-    //   alert('Failed to update property');
-    // }
+    try {
+      await axios.put(` http://localhost:5000/api/properties/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      alert('✅ Property updated successfully!');
+      navigate('/profile'); // redirect back to landlord profile
+    } catch (error) {
+      console.error('❌ Update error:', error);
+      alert('Failed to update property');
+    }
   };
 
   return (
@@ -77,14 +108,14 @@ export default function EditListing() {
             value={form.title}
             onChange={handleChange}
             placeholder="Title"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full p-3 border text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
           <input
             name="location"
             value={form.location}
             onChange={handleChange}
             placeholder="Location"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full p-3 border text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
           <input
             name="price"
@@ -92,7 +123,7 @@ export default function EditListing() {
             onChange={handleChange}
             placeholder="Price"
             type="number"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full p-3 border text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
 
           <input
@@ -100,17 +131,21 @@ export default function EditListing() {
             value={form.bedrooms}
             onChange={handleChange}
             placeholder="Bedrooms"
+            min="1"
+            max="5"
             type="number"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full p-3 border text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
 
           <input
             name="bathrooms"
             value={form.bathrooms}
             onChange={handleChange}
+            min="1"
+            max="5"
             placeholder="Bathrooms"
             type="number"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full p-3 border text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
 
           <div className="flex items-center space-x-6">
@@ -143,7 +178,7 @@ export default function EditListing() {
             value={form.description}
             onChange={handleChange}
             placeholder="Description"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full p-3 border text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
           {/* <label>choose</label> */}
           {/* <select className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
@@ -151,12 +186,56 @@ export default function EditListing() {
             <option value="sale">Sale</option>
           </select> */}
 
-          <input
-            type="file"
-            multiple
-            onChange={handleFileChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-          />
+          {/* <div>
+            <label className="block text-sm font-medium mb-2">
+              Current Images
+            </label>
+            <div className="flex flex-wrap gap-3">
+              {form.images?.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt=""
+                  className="w-24 h-24 rounded-lg object-cover border"
+                />
+              ))}
+            </div>
+          </div> */}
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-2">
+              Property Images
+            </label>
+            <div className="flex flex-wrap gap-3 ">
+              {previewImages?.length > 0 &&
+                previewImages.map((img, index) => (
+                  <img
+                    key={index}
+                    src={img}
+                    alt={`preview-${index}`}
+                    className="w-24 h-24 object-cover rounded-lg border"
+                  />
+                ))}
+            </div>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleImageChange}
+              className="border rounded-lg px-4 cursor-pointer py-2 w-full bg-gray-50"
+            />
+          </div>
+
+          {/* <div>
+            <label className="block text-sm font-medium mb-2">
+              Upload New Images
+            </label>
+            <input
+              type="file"
+              multiple
+              onChange={handleFileChange}
+              className="border rounded-lg px-4 py-2 w-full bg-gray-50"
+            />
+          </div> */}
 
           <button
             type="submit"

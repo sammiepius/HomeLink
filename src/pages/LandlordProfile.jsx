@@ -107,9 +107,12 @@ export default function LandlordDashboard() {
                 key={property.id}
                 className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
                 <img
-                  src={property.images?.[0] || '/placeholder.jpg'}
+                  src={
+                    property.images?.[0] ||
+                    'https://placehold.co/600x400?text=No+Image'
+                  }
                   alt={property.title}
-                  className="h-48 w-full object-cover"
+                  className="h-48 w-full object-cover bg-gray-100"
                 />
 
                 <div className="p-4">

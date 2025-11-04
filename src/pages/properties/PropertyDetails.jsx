@@ -42,7 +42,7 @@ export default function PropertyDetails() {
         <div className="relative">
           {images.length > 0 ? (
             <img
-              src={images[0]}
+              src={images[index]}
               alt={property.title}
               className="w-full h-96 object-cover"
             />

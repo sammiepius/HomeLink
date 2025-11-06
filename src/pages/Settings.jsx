@@ -104,7 +104,7 @@ export default function Settings({ role = 'Landlord' }) {
           newPassword: change.newPassword,
         },
         {
-          headers: { Authorization: ` Bearer ${token}` },
+          headers: { Authorization: ' Bearer ${token}' },
         }
       );
       toast.success('Password updated successfully!');

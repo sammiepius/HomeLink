@@ -16,6 +16,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Settings from './pages/Settings';
 import { Toaster } from 'sonner';
 import EditProperty from './pages/properties/EditProperties';
+import Footer from './components/footer';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
 
         <Route path='"/unauthorized' element={<h1>Unauthorized Access</h1>} />
       </Routes>
+      <Footer />
     </Router>
   );
 }

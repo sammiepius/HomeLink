@@ -1,19 +1,32 @@
 import { useEffect, useState } from 'react';
-import { Edit, Eye, PlusCircle, Settings, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  Edit,
+  Eye,
+  PlusCircle,
+  Settings,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Trash2,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function LandlordDashboard() {
   const navigate = useNavigate();
   const [avatar, setAvatar] = useState(null);
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
   const [myProperties, setMyProperties] = useState([]);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [propertyToDelete, setPropertyToDelete] = useState(null);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -59,6 +72,27 @@ export default function LandlordDashboard() {
     fetchUser();
     fetchMyProperty();
   }, []);
+
+  const handleDelete = async (id) => {
+    const token = localStorage.getItem('token');
+    if (!token) return console.error('No token found');
+    setDeleting(true); // start button loading
+
+    try {
+      await axios.delete(`http://localhost:5000/api/properties/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      toast.success(res.data.message || 'Property deleted successfully');
+
+      setMyProperties((prev) => prev.filter((listing) => listing.id !== id));
+      setShowConfirm(false);
+      setShowModal(false);
+    } catch (error) {
+      console.error(error);
+      alert('Failed to delete property. Please try again.');
+    }
+  };
 
   const handleNextImage = () => {
     if (!selectedProperty?.images?.length) return;
@@ -176,8 +210,7 @@ export default function LandlordDashboard() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setShowModal(false)}
-          >
+            onClick={() => setShowModal(false)}>
             <motion.div
               key="modal-content"
               className="bg-white/90 backdrop-blur-xl border border-white/30 rounded-t-3xl md:rounded-2xl shadow-2xl p-6 w-full md:w-[90%] max-w-lg relative overflow-hidden"
@@ -187,9 +220,7 @@ export default function LandlordDashboard() {
                   : { scale: 0.8, opacity: 0, y: 30 }
               }
               animate={
-                isMobile
-                  ? { y: 0, opacity: 1 }
-                  : { scale: 1, opacity: 1, y: 0 }
+                isMobile ? { y: 0, opacity: 1 } : { scale: 1, opacity: 1, y: 0 }
               }
               exit={
                 isMobile
@@ -197,8 +228,7 @@ export default function LandlordDashboard() {
                   : { scale: 0.9, opacity: 0, y: 20 }
               }
               transition={{ type: 'spring', damping: 20, stiffness: 200 }}
-              onClick={(e) => e.stopPropagation()}
-            >
+              onClick={(e) => e.stopPropagation()}>
               {/* Close button */}
               <button
                 onClick={() => setShowModal(false)}
@@ -229,14 +259,12 @@ export default function LandlordDashboard() {
                   <>
                     <button
                       onClick={handlePrevImage}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white rounded-full p-2 shadow"
-                    >
+                      className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white rounded-full p-2 shadow">
                       <ChevronLeft size={20} />
                     </button>
                     <button
                       onClick={handleNextImage}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white rounded-full p-2 shadow"
-                    >
+                      className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white rounded-full p-2 shadow">
                       <ChevronRight size={20} />
                     </button>
                   </>
@@ -262,11 +290,82 @@ export default function LandlordDashboard() {
                 <strong>Type:</strong> {selectedProperty.type || 'N/A'}
               </p>
 
-              <div className="mt-4 flex justify-end">
+              <div className="flex items-center justify-between mt-6">
+                <button
+                  onClick={() => {
+                    setPropertyToDelete(selectedProperty.id);
+                    setShowConfirm(true);
+                  }}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-1">
+                  <Trash2 size={16} /> Delete
+                </button>
                 <button
                   onClick={() => setShowModal(false)}
                   className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700">
                   Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showConfirm && (
+          <motion.div
+            className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowConfirm(false)}>
+            <motion.div
+              className="bg-white rounded-2xl p-6 shadow-xl text-center w-[90%] max-w-sm"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}>
+              <h2 className="text-lg font-semibold mb-2 text-gray-800">
+                Delete this property?
+              </h2>
+              <p className="text-gray-600 mb-5">
+                This action cannot be undone.
+              </p>
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={() => setShowConfirm(false)}
+                  className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg">
+                  Cancel
+                </button>
+                <button
+                  disabled={deleting}
+                  onClick={() => handleDelete(propertyToDelete)}
+                  className={`px-4 py-2 rounded-md text-white transition ${
+                    deleting
+                      ? 'bg-red-400 cursor-not-allowed'
+                      : 'bg-red-600 hover:bg-red-700'
+                  }`}>
+                  {deleting ? (
+                    <span className="flex items-center gap-2">
+                      <svg
+                        className="animate-spin h-4 w-4 text-white"
+                        viewBox="0 0 24 24">
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v8H4z"></path>
+                      </svg>
+                      Deleting...
+                    </span>
+                  ) : (
+                    'Delete'
+                  )}
                 </button>
               </div>
             </motion.div>

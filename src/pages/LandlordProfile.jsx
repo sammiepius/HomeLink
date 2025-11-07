@@ -40,9 +40,17 @@ export default function LandlordDashboard() {
       try {
         const token = localStorage.getItem('token');
         if (!token) return console.error('No token found');
+
         const res = await axios.get('http://localhost:5000/api/auth/me', {
           headers: { Authorization: `Bearer ${token}` },
         });
+
+        
+        if (res.data.role !== 'LANDLORD') {
+          navigate('/'); // or redirect to tenant dashboard / home
+          return;
+        }
+
         const itemData = res.data;
         setData(itemData);
         if (itemData.profilePhoto) setAvatar(itemData.profilePhoto);

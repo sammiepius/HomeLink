@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, MapPin } from 'lucide-react';
+import { Heart, MapPin, Settings } from 'lucide-react';
 
 export default function TenantProfile() {
   const savedProperties = [
@@ -30,9 +30,12 @@ export default function TenantProfile() {
   ];
 
   return (
-    <section className="min-h-screen bg-gray-50 flex flex-col items-center pt-16">
+    <section className=" relative pt-16 min-h-screen bg-gray-50 flex flex-col items-center">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-500 to-indigo-500 w-full py-10 rounded-b-3xl shadow-md flex flex-col items-center text-white">
+      <div className="relative bg-gradient-to-r from-teal-500 to-indigo-500 w-full py-10 rounded-b-3xl shadow-md flex flex-col items-center text-white">
+        {/* Settings icon in top-right */}
+        <Settings className="absolute top-4 right-6 w-6 h-6 cursor-pointer hover:rotate-90 transition-transform duration-300" />
+
         <img
           src="https://i.pravatar.cc/150?img=5"
           alt="Tenant Avatar"
@@ -43,7 +46,6 @@ export default function TenantProfile() {
         <span className="bg-white text-teal-600 px-4 py-1 rounded-full text-sm font-semibold">
           Tenant
         </span>
-        
       </div>
 
       {/* Saved Properties */}

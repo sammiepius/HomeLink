@@ -17,6 +17,7 @@ import Settings from './pages/Settings';
 import { Toaster } from 'sonner';
 import EditProperty from './pages/properties/EditProperties';
 import Footer from './components/footer';
+import Unauthorized from './pages/Unauthorized';
 
 function App() {
   return (
@@ -29,10 +30,23 @@ function App() {
         <Route path="/properties/:id" element={<PropertyDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/landlord" element={<LandlordProfile />} />
+
+        <Route
+          path="/landlord"
+          element={
+            <ProtectedRoute allowedRoles={['LANDLORD']}>
+              <LandlordProfile />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/landlordsettings"
-          element={<Settings role="Landlord" />}
+          // element={<Settings role="Landlord" />}
+          element={
+            <ProtectedRoute allowedRoles={['LANDLORD']}>
+              <Settings role="Landlord" />
+            </ProtectedRoute>
+          }
         />
         <Route path="/usersettings" element={<Settings role="tenant" />} />
         <Route path="/profile" element={<UserProfile />} />
@@ -54,7 +68,7 @@ function App() {
           }
         />
 
-        <Route path='"/unauthorized' element={<h1>Unauthorized Access</h1>} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>
       <Footer />
     </Router>

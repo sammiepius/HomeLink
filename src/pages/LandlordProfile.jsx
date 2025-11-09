@@ -12,7 +12,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 
 export default function LandlordDashboard() {
   const navigate = useNavigate();

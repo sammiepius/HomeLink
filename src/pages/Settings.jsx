@@ -84,7 +84,9 @@ export default function Settings({ role = 'Landlord' }) {
         },
       });
       toast.success('Profile updated successfully!');
-      navigate('/landlord');
+      const role = localStorage.getItem('role');
+      if (role === 'LANDLORD') navigate('/landlord');
+      else if (role === 'TENANT') navigate('/profile');
     } catch (err) {
       console.error(err);
       toast.error('Failed to update profile');
@@ -115,7 +117,7 @@ export default function Settings({ role = 'Landlord' }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex justify-center items-center px-4 py-10">
+    <div className="min-h-screen pt-17 bg-gray-50 flex justify-center items-center px-4 py-10">
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 md:p-10 border border-gray-100 relative">
         {/* Back Button */}
         <button

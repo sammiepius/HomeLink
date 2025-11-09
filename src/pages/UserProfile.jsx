@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Heart, MapPin, Settings } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function TenantProfile() {
+  const navigate = useNavigate();
+  const [data, setData] = useState({});
+  const [avatar, setAvatar] = useState(null);
   const savedProperties = [
     {
       id: 1,
@@ -28,23 +33,76 @@ export default function TenantProfile() {
         'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=800&q=80',
     },
   ];
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return console.error('No token found');
+
+        const res = await axios.get('http://localhost:5000/api/auth/me', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (res.data.role !== 'TENANT') {
+          navigate('/'); // or redirect to tenant dashboard / home
+          return;
+        }
+
+        const itemData = res.data;
+        setData(itemData);
+        console.log(data);
+        if (itemData.profilePhoto) setAvatar(itemData.profilePhoto);
+      } catch (err) {
+        console.error('Failed to load user data:', err);
+      }
+    };
+    fetchUser();
+  }, []);
 
   return (
     <section className=" relative pt-16 min-h-screen bg-gray-50 flex flex-col items-center">
       {/* Header */}
       <div className="relative bg-gradient-to-r from-teal-500 to-indigo-500 w-full py-10 rounded-b-3xl shadow-md flex flex-col items-center text-white">
         {/* Settings icon in top-right */}
-        <Settings className="absolute top-4 right-6 w-6 h-6 cursor-pointer hover:rotate-90 transition-transform duration-300" />
 
-        <img
+        <Settings
+          onClick={() => navigate('/usersettings')}
+          className="absolute top-4 right-6 w-5 h-5 cursor-pointer hover:rotate-90 transition-transform duration-300"
+        />
+        <div className='w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-2'>
+          {' '}
+          {avatar ? (
+            <img
+              src={avatar || '/default-avatar.png'}
+              alt="avatar preview"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-32 h-32 flex items-center justify-center text-sm text-gray-400 bg-gray-100 rounded-full">
+              Avatar
+            </div>
+          )}
+        </div>
+        {/* {avatar ? (
+          <img
+            src={avatar || '/default-avatar.png'}
+            alt="avatar preview"
+            className="w-2 h-25 rounded-full border-4 border-white shadow-lg mb-4"
+          />
+        ) : (
+          <div className="w-32 h-32 flex items-center justify-center text-sm text-gray-400 bg-gray-100 rounded-full">
+            Avatar
+          </div>
+        )} */}
+        {/* <img
           src="https://i.pravatar.cc/150?img=5"
           alt="Tenant Avatar"
           className="w-28 h-28 rounded-full border-4 border-white shadow-lg mb-4"
-        />
-        <h1 className="text-2xl font-bold">John Doe</h1>
-        <p className="text-sm text-teal-100 mb-1">johndoe@example.com</p>
+        /> */}
+        <h1 className="text-2xl font-bold">{data.name}</h1>
+        <p className="text-sm text-teal-100 mb-1">{data.email}</p>
         <span className="bg-white text-teal-600 px-4 py-1 rounded-full text-sm font-semibold">
-          Tenant
+          {data.role}
         </span>
       </div>
 

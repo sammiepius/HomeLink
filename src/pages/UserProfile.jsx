@@ -7,32 +7,8 @@ export default function TenantProfile() {
   const navigate = useNavigate();
   const [data, setData] = useState({});
   const [avatar, setAvatar] = useState(null);
-  const savedProperties = [
-    {
-      id: 1,
-      title: 'Modern Apartment in Lekki',
-      location: 'Lekki, Lagos',
-      price: '₦250,000 / month',
-      image:
-        'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 2,
-      title: 'Luxury Villa in Banana Island',
-      location: 'Banana Island, Lagos',
-      price: '₦1,200,000 / month',
-      image:
-        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: 3,
-      title: 'Cozy Studio in Yaba',
-      location: 'Yaba, Lagos',
-      price: '₦150,000 / month',
-      image:
-        'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=800&q=80',
-    },
-  ];
+  const [favorites, setFavorites] = useState([]);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -56,6 +32,20 @@ export default function TenantProfile() {
         console.error('Failed to load user data:', err);
       }
     };
+
+    const fetchFavorites = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get('http://localhost:5000/api/favorite', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setFavorites(res.data);
+      } catch (err) {
+        console.error('Failed to load favorites:', err);
+      }
+    };
+
+    fetchFavorites();
     fetchUser();
   }, []);
 
@@ -69,7 +59,7 @@ export default function TenantProfile() {
           onClick={() => navigate('/usersettings')}
           className="absolute top-4 right-6 w-5 h-5 cursor-pointer hover:rotate-90 transition-transform duration-300"
         />
-        <div className='w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-2'>
+        <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-2">
           {' '}
           {avatar ? (
             <img
@@ -83,22 +73,6 @@ export default function TenantProfile() {
             </div>
           )}
         </div>
-        {/* {avatar ? (
-          <img
-            src={avatar || '/default-avatar.png'}
-            alt="avatar preview"
-            className="w-2 h-25 rounded-full border-4 border-white shadow-lg mb-4"
-          />
-        ) : (
-          <div className="w-32 h-32 flex items-center justify-center text-sm text-gray-400 bg-gray-100 rounded-full">
-            Avatar
-          </div>
-        )} */}
-        {/* <img
-          src="https://i.pravatar.cc/150?img=5"
-          alt="Tenant Avatar"
-          className="w-28 h-28 rounded-full border-4 border-white shadow-lg mb-4"
-        /> */}
         <h1 className="text-2xl font-bold">{data.name}</h1>
         <p className="text-sm text-teal-100 mb-1">{data.email}</p>
         <span className="bg-white text-teal-600 px-4 py-1 rounded-full text-sm font-semibold">
@@ -113,12 +87,15 @@ export default function TenantProfile() {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {savedProperties.map((property) => (
+          {favorites.map((property) => (
             <div
               key={property.id}
               className="bg-white rounded-2xl shadow-md hover:shadow-lg transition transform hover:-translate-y-1">
               <img
-                src={property.image}
+                src={
+                  property.images?.[0] ||
+                  'https://placehold.co/600x400?text=No+Image'
+                }
                 alt={property.title}
                 className="w-full h-48 object-cover rounded-t-2xl"
               />

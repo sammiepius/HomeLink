@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function PropertyDetails() {
@@ -11,6 +11,8 @@ export default function PropertyDetails() {
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [toggling, setToggling] = useState(false);
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -25,39 +27,62 @@ export default function PropertyDetails() {
         setLoading(false);
       }
     };
+    const fetchFavoriteStatus = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
 
-    const checkFavoriteStatus = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) return;
-        const res = await axios.get('http://localhost:5000/api/favorites', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const isSaved = res.data.some((fav) => fav.propertyId === parseInt(id));
-        setIsFavorite(isSaved);
-      } catch (err) {
-        console.error('Failed to check favorites:', err);
+        const res = await axios.get(
+          `http://localhost:5000/api/favorite/${id}/status`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setIsFavorite(res.data.isFavorite);
+      } catch (error) {
+        console.error('Error checking favorite status', error);
       }
     };
-    checkFavoriteStatus();
+
+    fetchFavoriteStatus();
     fetchProperty();
   }, [id]);
 
-  const handleFavorite = async (id) => {
+  const toggleFavorite = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error('Please log in to save properties');
+      return;
+    }
+
+    setToggling(true);
+
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(
-        `http://localhost:5000/api/favorite/${id}`,
-        {},
-        {
+      if (isFavorite) {
+        await axios.delete(`http://localhost:5000/api/favorite/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      toast.success('Added to favorites!');
+        });
+        setIsFavorite(false);
+        toast.success('Removed from favorites');
+      } else {
+        await axios.post(
+          `http://localhost:5000/api/favorite/${id}`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setIsFavorite(true);
+        toast.success('Added to favorites!');
+      }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to save property');
+      console.error(error);
+      toast.error('Something went wrong');
+    } finally {
+      setToggling(false);
     }
   };
+
+  if (loading)
+    return <p className="text-center text-gray-500 mt-10">Loading...</p>;
 
   if (loading)
     return <p className="text-center mt-10">Loading property details...</p>;
@@ -116,6 +141,33 @@ export default function PropertyDetails() {
           <div className="absolute top-4 left-4 bg-teal-600 text-white px-3 py-1 rounded-lg text-sm shadow-md">
             {property.type === 'rent' ? 'For Rent' : 'For Sale'}
           </div>
+          {/* ❤️ Heart button */}
+          <button
+            onClick={toggleFavorite}
+            disabled={toggling}
+            className="absolute top-3 right-3 z-10 bg-transparent p-1">
+            <Heart
+              size={26}
+              className={`cursor-pointer transition-all duration-200 drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)] ${
+                isFavorite
+                  ? 'fill-red-500 text-red-500 hover:opacity-90'
+                  : 'text-white hover:text-red-400'
+              } ${toggling ? 'opacity-50 cursor-not-allowed' : ''}`}
+            />
+          </button>
+          <button
+            onClick={toggleFavorite}
+            disabled={toggling}
+            className="absolute top-3 right-3 z-10 bg-transparent p-1">
+            <Heart
+              size={26}
+              className={`cursor-pointer transition-all duration-200 drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)] ${
+                isFavorite
+                  ? 'fill-red-500 text-red-500 hover:opacity-90'
+                  : 'text-white hover:text-red-400'
+              } ${toggling ? 'opacity-50 cursor-not-allowed' : ''}`}
+            />
+          </button>
         </div>
 
         {/* Thumbnails */}
@@ -165,11 +217,11 @@ export default function PropertyDetails() {
               className="px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-lg transition">
               📞 Contact Landlord
             </motion.button>
-            <button
+            {/* <button
               onClick={() => handleFavorite(property.id)}
               className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 flex items-center gap-2">
               ❤️ Save to Favorites
-            </button>
+            </button> */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               onClick={() => window.history.back()}

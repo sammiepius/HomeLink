@@ -40,6 +40,7 @@ export default function TenantProfile() {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFavorites(res.data);
+        console.log(res.data);
       } catch (err) {
         console.error('Failed to load favorites:', err);
       }
@@ -107,9 +108,9 @@ export default function TenantProfile() {
                   <MapPin className="w-4 h-4 mr-1" />
                   <p className="text-sm">{property.location}</p>
                 </div>
-                <p className="text-teal-600 font-bold mt-3">{property.price}</p>
+                <p className="text-teal-600 font-bold mt-3">₦{Number(property.price).toLocaleString()}</p>
 
-                <button className="mt-4 w-full bg-gradient-to-r from-teal-500 to-indigo-500 text-white font-medium py-2 rounded-xl flex items-center justify-center space-x-2 hover:opacity-90 transition">
+                <button onClick={() => navigate(`/properties/${property.id}`)} className="mt-4 w-full bg-gradient-to-r from-teal-500 to-indigo-500 text-white font-medium py-2 rounded-xl flex items-center justify-center space-x-2 hover:opacity-90 transition">
                   <Heart className="w-4 h-4" />
                   <span>View Details</span>
                 </button>

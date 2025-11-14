@@ -72,92 +72,96 @@ export default function Listings() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8 md:p-25">
-      {/* Search + Filter */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-        <input
-          type="text"
-          placeholder="Search by location, title, or description..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full md:w-1/2 border rounded px-4 py-2 focus:ring-2 focus:ring-teal-500"
-        />
+   
+ <div className="min-h-screen bg-gray-50 px-4 py-6 sm:px-6 md:px-10 lg:px-20 pt-24">
+  {/* Search + Filter */}
+  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <input
+      type="text"
+      placeholder="Search by location, title, or description..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="w-full md:w-1/2 border rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-500"
+    />
 
-        <div className="flex gap-3">
-          {['all', 'rent', 'sale'].map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`px-4 py-2 rounded ${
-                filter === f
-                  ? 'bg-teal-600 text-white'
-                  : 'bg-gray-200 hover:bg-gray-300'
-              }`}>
-              {f === 'all' ? 'All' : f === 'rent' ? 'For Rent' : 'For Sale'}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Property Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {loading ? (
-          <p className="text-center text-gray-500 col-span-4">Loading...</p>
-        ) : filteredProperties.length > 0 ? (
-          filteredProperties.map((p) => {
-            const index = activeImage[p.id] || 0;
-            return (
-              <div
-                key={p.id}
-                onMouseEnter={() =>
-                  handleHoverStart(p.id, p.images ? p.images.length : 1)
-                }
-                onMouseLeave={() => handleHoverEnd(p.id)}
-                className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 overflow-hidden">
-                {/* Image section */}
-                <div className="relative group overflow-hidden">
-                  <img
-                    src={
-                      p.images && p.images.length > 0
-                        ? p.images[index]
-                        : '/placeholder.jpg'
-                    }
-                    alt={p.name}
-                    className={`h-44 w-full object-cover transition-opacity duration-500 ease-in-out ${
-                      fade[p.id] ? 'opacity-0' : 'opacity-100'
-                    }`}
-                  />
-                </div>
-
-                {/* Details */}
-                <div className="p-3 space-y-1">
-                  <h2 className="text-base font-semibold text-gray-900">
-                    ₦{Number(p.price).toLocaleString()}
-                  </h2>
-                  <div className="flex items-center text-gray-500 text-xs">
-                    <MapPin size={12} className="mr-1" />
-                    {p.location}
-                  </div>
-
-                  <p className="text-xs text-gray-600">
-                    {p.beds} Beds • {p.baths} Baths • {p.type}
-                  </p>
-
-                  <button
-                    onClick={() => navigate(`/properties/${p.id}`)}
-                    className="mt-2 w-full py-2 text-xs bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition">
-                    View Details
-                  </button>
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <p className="text-gray-500 col-span-3 text-center">
-            No properties found.
-          </p>
-        )}
-      </div>
+    <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-1">
+      {['all', 'rent', 'sale'].map((f) => (
+        <button
+          key={f}
+          onClick={() => setFilter(f)}
+          className={`px-4 py-2 rounded-lg whitespace-nowrap ${
+            filter === f
+              ? 'bg-teal-600 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}>
+          {f === 'all' ? 'All' : f === 'rent' ? 'For Rent' : 'For Sale'}
+        </button>
+      ))}
     </div>
+  </div>
+
+  {/* Property Grid */}
+  <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {loading ? (
+      <p className="text-center text-gray-500 col-span-full">Loading...</p>
+    ) : filteredProperties.length > 0 ? (
+      filteredProperties.map((p) => {
+        const index = activeImage[p.id] || 0;
+        return (
+          <div
+            key={p.id}
+            onMouseEnter={() =>
+              handleHoverStart(p.id, p.images ? p.images.length : 1)
+            }
+            onMouseLeave={() => handleHoverEnd(p.id)}
+            className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 overflow-hidden">
+
+            {/* Image */}
+            <div className="relative overflow-hidden">
+              <img
+                src={
+                  p.images && p.images.length > 0
+                    ? p.images[index]
+                    : '/placeholder.jpg'
+                }
+                alt={p.name}
+                className={`h-48 sm:h-52 md:h-44 w-full object-cover transition duration-500 ${
+                  fade[p.id] ? 'opacity-0' : 'opacity-100'
+                }`}
+              />
+            </div>
+
+            {/* Details */}
+            <div className="p-4 space-y-2">
+              <h2 className="text-lg font-semibold text-gray-900">
+                ₦{Number(p.price).toLocaleString()}
+              </h2>
+
+              <div className="flex items-center text-gray-500 text-sm">
+                <MapPin size={14} className="mr-1" />
+                {p.location}
+              </div>
+
+              <p className="text-sm text-gray-600">
+                {p.beds} Beds • {p.baths} Baths • {p.type}
+              </p>
+
+              <button
+                onClick={() => navigate(`/properties/${p.id}`)}
+                className="mt-2 w-full py-2 text-sm bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition">
+                View Details
+              </button>
+            </div>
+          </div>
+        );
+      })
+    ) : (
+      <p className="text-gray-500 col-span-full text-center">
+        No properties found.
+      </p>
+    )}
+  </div>
+</div>
+
   );
 }

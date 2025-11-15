@@ -12,7 +12,7 @@ export default function HomePage() {
       <Hero />
       <Features />
       <Listings />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

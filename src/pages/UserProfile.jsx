@@ -101,9 +101,9 @@ export default function TenantProfile() {
                 className="w-full h-48 object-cover rounded-t-2xl"
               />
               <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-800">
+                {/* <h3 className="text-lg font-semibold text-gray-800">
                   {property.title}
-                </h3>
+                </h3> */}
                 <div className="flex items-center text-gray-500 mt-1">
                   <MapPin className="w-4 h-4 mr-1" />
                   <p className="text-sm">{property.location}</p>

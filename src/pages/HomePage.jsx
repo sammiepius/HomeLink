@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '../components/NavBar';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
-import Listings from '../components/Listings';
+import Listings from '../components/FeaturedListings';
 import Footer from '../components/footer';
 
 export default function HomePage() {

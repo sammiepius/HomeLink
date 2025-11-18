@@ -363,6 +363,7 @@ export default function Navbar() {
                     // }}
                     onClick={() => {
                       setOpenDropdown(false);
+                       setOpen(false);
                       const role = localStorage.getItem('role');
                       if (role === 'LANDLORD') navigate('/landlord');
                       else if (role === 'TENANT') navigate('/profile');

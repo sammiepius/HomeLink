@@ -402,7 +402,7 @@ export default function Listings() {
   }
 
   return (
-    <section id="listings" className="py-20 bg-gray-50">
+    <section id="listings" className="py-5 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-12 text-center">
           Featured <span className="text-teal-600">Listings</span>
@@ -461,16 +461,29 @@ export default function Listings() {
                   <div className="absolute bottom-3 left-3 bg-black/70 text-white px-3 py-1 rounded-lg text-sm font-semibold shadow-md">
                     ₦{Number(p.price).toLocaleString()}
                   </div>
+
+                  {/* IMAGE DOTS */}
+                  <div className="absolute bottom-3 inset-x-0 flex justify-center space-x-2">
+                    {images.map((_, i) => (
+                      <div
+                        key={i}
+                        className={`w-2 h-2 rounded-full transition-all ${
+                          i === current ? 'bg-white' : 'bg-white/40'
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </div>
+
                 {/* CONTENT */}
                 <div className="p-3">
                   {/* <h3 className="text-lg font-bold text-gray-800 mb-1">{p.title}</h3> */}
-                  <div className="flex font-bold items-center text-gray-500 text-sm mb-2">
+                  <div className="flex items-center text-gray-500 text-sm mb-2">
                     <FaHome className="mr-1 text-teal-600" />
                     {p.title}
                   </div>
 
-                  <div className="flex font-bold items-center text-gray-500 text-sm mb-2">
+                  <div className="flex items-center text-gray-500 text-sm mb-2">
                     <FaMapMarkerAlt className="mr-1 text-teal-600" />
                     {p.location || 'Unknown Location'}
                   </div>

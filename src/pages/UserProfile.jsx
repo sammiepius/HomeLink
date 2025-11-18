@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Heart, MapPin, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 export default function TenantProfile() {
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ export default function TenantProfile() {
         </div>
         <h1 className="text-2xl font-bold">{data.name}</h1>
         <p className="text-sm text-teal-100 mb-1">{data.email}</p>
-        <span className="bg-white text-teal-600 px-4 py-1 rounded-full text-sm font-semibold">
+        <span className=" bg-gradient-to-r from-pink-500 to-teal-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
           {data.role}
         </span>
       </div>
@@ -106,7 +107,8 @@ export default function TenantProfile() {
                 </h3> */}
                 <div className="flex items-center text-gray-500 mt-1">
                   <MapPin className="w-4 h-4 mr-1" />
-                  <p className="text-sm">{property.location}</p>
+                   {/* <FaMapMarkerAlt className="mr-1 text-teal-600" /> */}
+                  <span className="text-sm">{property.location}</span>
                 </div>
                 <p className="text-teal-600 font-bold mt-3">₦{Number(property.price).toLocaleString()}</p>
 

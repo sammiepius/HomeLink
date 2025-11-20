@@ -18,6 +18,7 @@ import { Toaster } from 'sonner';
 import EditProperty from './pages/properties/EditProperties';
 import Footer from './components/footer';
 import Unauthorized from './pages/Unauthorized';
+import ContactPage from './pages/ContactPage';
 
 function App() {
   return (
@@ -30,6 +31,8 @@ function App() {
         <Route path="/properties/:id" element={<PropertyDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/contact" element={<ContactPage />} />
 
         <Route
           path="/landlord"

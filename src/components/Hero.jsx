@@ -26,7 +26,7 @@ export default function () {
             Explore Listings
           </a>
           <a
-            href="#contact"
+            href="/contact"
             className="px-6 py-3 rounded-lg border border-white text-white hover:bg-white hover:text-gray-800 transition">
             Contact Us
           </a>

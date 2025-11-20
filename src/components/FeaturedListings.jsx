@@ -478,12 +478,12 @@ export default function Listings() {
                 {/* CONTENT */}
                 <div className="p-3">
                   {/* <h3 className="text-lg font-bold text-gray-800 mb-1">{p.title}</h3> */}
-                  <div className="flex items-center text-gray-500 text-sm mb-2">
+                  <div className="flex items-center text-500 text-md mb-2">
                     <FaHome className="mr-1 text-teal-600" />
                     {p.title}
                   </div>
 
-                  <div className="flex items-center text-gray-500 text-sm mb-2">
+                  <div className="flex items-center text-gray-500 text-md mb-2">
                     <FaMapMarkerAlt className="mr-1 text-teal-600" />
                     {p.location || 'Unknown Location'}
                   </div>

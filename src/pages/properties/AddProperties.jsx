@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import API from '../../api/axios';
 
 export default function AddProperty() {
   const [form, setForm] = useState({
@@ -57,14 +58,10 @@ export default function AddProperty() {
       const uploadData = new FormData();
       form.images.forEach((file) => uploadData.append('images', file));
 
-      const uploadRes = await axios.post(
-        'http://localhost:5000/api/upload',
-        uploadData,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-          // Authorization: `Bearer ${token}`,
-        }
-      );
+      const uploadRes = await API.post('upload', uploadData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        // Authorization: `Bearer ${token}`,
+      });
 
       const uploadedUrls = uploadRes.data.urls;
 
@@ -80,8 +77,8 @@ export default function AddProperty() {
         images: uploadedUrls,
       };
 
-      const res = await axios.post(
-        'http://localhost:5000/api/properties/add',
+      const res = await API.post(
+        'properties/add',
         propertyData,
         {
           headers: {

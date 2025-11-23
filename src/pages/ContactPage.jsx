@@ -166,7 +166,7 @@ export default function ContactPage() {
                 <FaMapMarkerAlt className="text-teal-600 text-xl mt-1" />
                 <div>
                   <p className="font-medium text-gray-700">Address</p>
-                  <p className="text-gray-600">Kano, Nigeria</p>
+                  <p className="text-gray-600">Gombe, Nigeria</p>
                 </div>
               </div>
             </div>
@@ -175,7 +175,7 @@ export default function ContactPage() {
             <div className="bg-white rounded-xl shadow-md overflow-hidden">
               <MapContainer
                 center={[10.3129, 10.9612]} // Tumfure, Gombe State
-                zoom={14}
+                zoom={9}
                 scrollWheelZoom={false}
                 className="w-full h-48">
                 <TileLayer

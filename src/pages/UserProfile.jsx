@@ -107,12 +107,16 @@ export default function TenantProfile() {
                 </h3> */}
                 <div className="flex items-center text-gray-500 mt-1">
                   <MapPin className="w-4 h-4 mr-1" />
-                   {/* <FaMapMarkerAlt className="mr-1 text-teal-600" /> */}
+                  {/* <FaMapMarkerAlt className="mr-1 text-teal-600" /> */}
                   <span className="text-sm">{property.location}</span>
                 </div>
-                <p className="text-teal-600 font-bold mt-3">₦{Number(property.price).toLocaleString()}</p>
+                <p className="text-teal-600 font-bold mt-3">
+                  ₦{Number(property.price).toLocaleString()}
+                </p>
 
-                <button onClick={() => navigate(`/properties/${property.id}`)} className="mt-4 w-full bg-gradient-to-r from-teal-500 to-indigo-500 text-white font-medium py-2 rounded-xl flex items-center justify-center space-x-2 hover:opacity-90 transition">
+                <button
+                  onClick={() => navigate(`/properties/${property.id}`)}
+                  className="mt-4 w-full bg-gradient-to-r from-teal-500 to-indigo-500 text-white font-medium py-2 rounded-xl flex items-center justify-center space-x-2 hover:opacity-90 transition">
                   <Heart className="w-4 h-4" />
                   <span>View Details</span>
                 </button>

@@ -17,6 +17,7 @@ export default function AddProperty() {
   const [error, setError] = useState('');
   const [preview, setPreview] = useState([]);
   const [loading, setLoading] = useState(false);
+  // const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -77,20 +78,16 @@ export default function AddProperty() {
         images: uploadedUrls,
       };
 
-      const res = await API.post(
-        'properties/add',
-        propertyData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            // Uncomment if your backend uses JWT auth
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await API.post('properties/add', propertyData, {
+        headers: {
+          'Content-Type': 'application/json',
+          // Uncomment if your backend uses JWT auth
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (res.status === 201 || res.status === 200) {
-        toast.success('✅ Property added successfully!');
+        toast.success(' Property added successfully!');
         console.log(res.data);
         setForm({
           title: '',
@@ -253,8 +250,9 @@ export default function AddProperty() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full px-6 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition">
-            Add Property
+            disabled={loading}
+            className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-lg disabled:opacity-50">
+            {loading ? 'Saving...' : 'Add Property'}
           </button>
         </form>
       </div>

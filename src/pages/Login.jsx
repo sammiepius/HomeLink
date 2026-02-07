@@ -4,10 +4,12 @@ import { AuthContext } from '../context/AuthContext';
 // import axios from 'axios';
 import API from '../api/axios';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -17,6 +19,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError('');
 
     if (!form.email || !form.password) {
@@ -92,11 +95,27 @@ export default function Login() {
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
 
-            <button
+            {/* <button
               type="submit"
               className="w-full px-6 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition">
               Login
+            </button> */}
+            {/* <div className="flex justify-end"> */}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full px-6 py-3 gap-2 bg-teal-600 hover:bg-teal-700 transition-all text-white font-medium rounded-lg ${
+                loading && 'opacity-70 cursor-not-allowed'
+              }`}>
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin " size={18} />
+                </>
+              ) : (
+                'Login'
+              )}
             </button>
+            {/* </div> */}
           </form>
 
           <p className="text-gray-600 text-sm mt-6 text-center">

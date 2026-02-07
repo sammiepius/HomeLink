@@ -147,7 +147,7 @@ export default function AddProperty() {
             name="location"
             value={form.location}
             onChange={handleChange}
-            placeholder="Location (e.g. Lagos, Nigeria)"
+            placeholder="Location (e.g.Gombe, Nigeria)"
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
 

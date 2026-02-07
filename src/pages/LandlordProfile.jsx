@@ -44,7 +44,6 @@ export default function LandlordDashboard() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        
         if (res.data.role !== 'LANDLORD') {
           navigate('/'); // or redirect to tenant dashboard / home
           return;
@@ -119,10 +118,10 @@ export default function LandlordDashboard() {
     return <p className="text-center text-gray-500 mt-10">Loading.....</p>;
 
   return (
-    <section className="min-h-screen bg-gray-50 pt-24 px-6">
-      <div className="max-w-5xl mx-auto">
-        {/* Profile Card */}
-        <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
+    <section className=" relative pt-16 min-h-screen bg-gray-50 flex flex-col items-center">
+      {/* <div className="max-w-5xl mx-auto"> */}
+      {/* Profile Card */}
+      {/* <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
           {avatar ? (
             <img
               src={avatar || '/default-avatar.png'}
@@ -144,69 +143,98 @@ export default function LandlordDashboard() {
             className="flex px-5 py-3 text-gray-700 hover:text-teal-600 cursor-pointer">
             <Settings size={16} className="mr-2" />
           </div>
-        </div>
+        </div> */}
 
-        {/* Property List */}
-        <div className="mt-10">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-6">
-              My Posted Apartments
-            </h3>
-            <button
-              onClick={() => navigate('/addproperties')}
-              className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition flex items-center gap-2">
-              <PlusCircle size={18} />
-              Add Listing
-            </button>
-          </div>
-          <hr />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {myProperties.map((property) => (
-              <div
-                key={property.id}
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-                <img
-                  src={
-                    property.images?.[0] ||
-                    'https://placehold.co/600x400?text=No+Image'
-                  }
-                  alt={property.title}
-                  className="h-48 w-full object-cover bg-gray-100"
-                />
-                <div className="p-4">
-                  <h4 className="text-lg font-semibold text-gray-800">
-                    {property.title}
-                  </h4>
-                  <p className="text-gray-600 text-sm mt-1">
-                    {property.location}
-                  </p>
-                  <p className="text-teal-600 font-bold mt-2">
-                    ₦{Number(property.price).toLocaleString()}
-                  </p>
-                  <div className="flex justify-between mt-4">
-                    <button
-                      onClick={() => {
-                        setSelectedProperty(property);
-                        setCurrentImageIndex(0);
-                        setShowModal(true);
-                      }}
-                      className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center gap-2 text-gray-700 text-sm">
-                      <Eye size={16} />
-                      View
-                    </button>
-                    <button
-                      onClick={() => navigate(`/editproperties/${property.id}`)}
-                      className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center gap-2 text-sm">
-                      <Edit size={16} />
-                      Edit
-                    </button>
-                  </div>
+      <div className="relative bg-gradient-to-r from-teal-500 to-indigo-500 w-full py-10  shadow-md flex flex-col items-center text-white">
+        {/* Settings icon in top-right */}
+
+        <Settings
+          onClick={() => navigate('/usersettings')}
+          className="absolute top-4 right-6 w-5 h-5 cursor-pointer hover:rotate-90 transition-transform duration-300"
+        />
+        <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-2">
+          {' '}
+          {avatar ? (
+            <img
+              src={avatar || '/default-avatar.png'}
+              alt="avatar preview"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-32 h-32 flex items-center justify-center text-sm text-gray-400 bg-gray-100 rounded-full">
+              Avatar
+            </div>
+          )}
+        </div>
+        <h1 className="text-2xl font-bold">{data.name}</h1>
+        <p className="text-sm text-teal-100 mb-1">{data.email}</p>
+        <span className=" bg-gradient-to-r from-pink-500 to-teal-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
+          {data.role}
+        </span>
+      </div>
+
+      {/* Property List */}
+      {/* <div className="mt-10"> */}
+      <div className="w-full max-w-6xl px-6 py-10">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-6">
+            My Posted Apartments
+          </h3>
+          <button
+            onClick={() => navigate('/addproperties')}
+            className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition flex items-center gap-2">
+            <PlusCircle size={18} />
+            Add Listing
+          </button>
+        </div>
+        <hr />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {myProperties.map((property) => (
+            <div
+              key={property.id}
+              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
+              <img
+                src={
+                  property.images?.[0] ||
+                  'https://placehold.co/600x400?text=No+Image'
+                }
+                alt={property.title}
+                className="h-48 w-full object-cover bg-gray-100"
+              />
+              <div className="p-4">
+                <h4 className="text-lg font-semibold text-gray-800">
+                  {property.title}
+                </h4>
+                <p className="text-gray-600 text-sm mt-1">
+                  {property.location}
+                </p>
+                <p className="text-teal-600 font-bold mt-2">
+                  ₦{Number(property.price).toLocaleString()}
+                </p>
+                <div className="flex justify-between mt-4">
+                  <button
+                    onClick={() => {
+                      setSelectedProperty(property);
+                      setCurrentImageIndex(0);
+                      setShowModal(true);
+                    }}
+                    className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 flex items-center gap-2 text-gray-700 text-sm">
+                    <Eye size={16} />
+                    View
+                  </button>
+                  <button
+                    onClick={() => navigate(`/editproperties/${property.id}`)}
+                    className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 flex items-center gap-2 text-sm">
+                    <Edit size={16} />
+                    Edit
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
+      {/* </div> */}
 
       {/* Modal with Image Controls */}
       <AnimatePresence>
@@ -382,3 +410,138 @@ export default function LandlordDashboard() {
     </section>
   );
 }
+// import React, { useEffect, useState } from 'react';
+// import { Heart, MapPin, Settings } from 'lucide-react';
+// import { useNavigate } from 'react-router-dom';
+// import axios from 'axios';
+// import { FaMapMarkerAlt } from 'react-icons/fa';
+
+// export default function TenantProfile() {
+//   const navigate = useNavigate();
+//   const [data, setData] = useState({});
+//   const [avatar, setAvatar] = useState(null);
+//   const [favorites, setFavorites] = useState([]);
+
+//   useEffect(() => {
+//     const fetchUser = async () => {
+//       try {
+//         const token = localStorage.getItem('token');
+//         if (!token) return console.error('No token found');
+
+//         const res = await axios.get('http://localhost:5000/api/auth/me', {
+//           headers: { Authorization: `Bearer ${token}` },
+//         });
+
+//         if (res.data.role !== 'TENANT') {
+//           navigate('/'); // or redirect to tenant dashboard / home
+//           return;
+//         }
+
+//         const itemData = res.data;
+//         setData(itemData);
+//         console.log(data);
+//         if (itemData.profilePhoto) setAvatar(itemData.profilePhoto);
+//       } catch (err) {
+//         console.error('Failed to load user data:', err);
+//       }
+//     };
+
+//     const fetchFavorites = async () => {
+//       try {
+//         const token = localStorage.getItem('token');
+//         const res = await axios.get('http://localhost:5000/api/favorite', {
+//           headers: { Authorization: `Bearer ${token}` },
+//         });
+//         setFavorites(res.data);
+//         console.log(res.data);
+//       } catch (err) {
+//         console.error('Failed to load favorites:', err);
+//       }
+//     };
+
+//     fetchFavorites();
+//     fetchUser();
+//   }, []);
+
+//   return (
+//     <section className=" relative pt-16 min-h-screen bg-gray-50 flex flex-col items-center">
+//       {/* Header */}
+//       <div className="relative bg-gradient-to-r from-teal-500 to-indigo-500 w-full py-10 rounded-b-3xl shadow-md flex flex-col items-center text-white">
+//         {/* Settings icon in top-right */}
+
+//         <Settings
+//           onClick={() => navigate('/usersettings')}
+//           className="absolute top-4 right-6 w-5 h-5 cursor-pointer hover:rotate-90 transition-transform duration-300"
+//         />
+//         <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-2">
+//           {' '}
+//           {avatar ? (
+//             <img
+//               src={avatar || '/default-avatar.png'}
+//               alt="avatar preview"
+//               className="w-full h-full object-cover"
+//             />
+//           ) : (
+//             <div className="w-32 h-32 flex items-center justify-center text-sm text-gray-400 bg-gray-100 rounded-full">
+//               Avatar
+//             </div>
+//           )}
+//         </div>
+//         <h1 className="text-2xl font-bold">{data.name}</h1>
+//         <p className="text-sm text-teal-100 mb-1">{data.email}</p>
+//         <span className=" bg-gradient-to-r from-pink-500 to-teal-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
+//           {data.role}
+//         </span>
+//       </div>
+
+//       {/* Saved Properties */}
+//       <div className="w-full max-w-6xl px-6 py-10">
+//         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+//           💖 Your Saved Properties
+//         </h2>
+
+//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+//           {favorites.map((property) => (
+//             <div
+//               key={property.id}
+//               className="bg-white rounded-2xl shadow-md hover:shadow-lg transition transform hover:-translate-y-1">
+//               <img
+//                 src={
+//                   property.images?.[0] ||
+//                   'https://placehold.co/600x400?text=No+Image'
+//                 }
+//                 alt={property.title}
+//                 className="w-full h-48 object-cover rounded-t-2xl"
+//               />
+//               <div className="p-4">
+//                 {/* <h3 className="text-lg font-semibold text-gray-800">
+//                   {property.title}
+//                 </h3> */}
+//                 <div className="flex items-center text-gray-500 mt-1">
+//                   <MapPin className="w-4 h-4 mr-1" />
+//                   {/* <FaMapMarkerAlt className="mr-1 text-teal-600" /> */}
+//                   <span className="text-sm">{property.location}</span>
+//                 </div>
+//                 <p className="text-teal-600 font-bold mt-3">
+//                   ₦{Number(property.price).toLocaleString()}
+//                 </p>
+
+//                 <button
+//                   onClick={() => navigate(`/properties/${property.id}`)}
+//                   className="mt-4 w-full bg-gradient-to-r from-teal-500 to-indigo-500 text-white font-medium py-2 rounded-xl flex items-center justify-center space-x-2 hover:opacity-90 transition">
+//                   <Heart className="w-4 h-4" />
+//                   <span>View Details</span>
+//                 </button>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+
+//       {/* Footer */}
+//       <p className="text-gray-500 text-sm mb-10">
+//         Manage your dream homes from one place 🏡
+//       </p>
+//     </section>
+//   );
+// }
